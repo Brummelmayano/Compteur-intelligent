@@ -1,0 +1,80 @@
+class Noeud:
+    """
+    Cette classe représente un noeud d'une liste chaînée de valeurs.
+    Chaque valeur est représentée par un tableau de trois éléments.
+    """
+    def __init__(self, valeur):
+        if len(valeur) != 3:
+            raise ValueError("La valeur doit être un tableau de trois éléments")
+
+        
+        self.valeur = valeur  # valeur est un tableau de trois tableaux de trois éléments
+        self.suivant = None
+
+class ListeChainee:
+    """
+    Cette classe représente une liste chaînée de valeurs, et
+    Chaque valeur est représentée par un tableau de trois éléments.
+    Cette classe permet d'ajouter des valeurs à la fin de la liste,
+    La taille maximale de la liste est limitée à 5.
+    Lorsque la taille dépasse 5, le plus ancien élément est supprimé.
+    """
+
+    def __init__(self):
+        self.tete = None
+        self.taille = 0
+
+    def ajouter(self, valeur):
+        if len(valeur) != 3:
+            raise ValueError("La valeur doit être un tableau de trois éléments")
+
+        
+        nouveau_noeud = Noeud(valeur)
+
+        if self.tete is None:
+            self.tete = nouveau_noeud
+            self.taille = 1
+            return
+
+        # Parcourir la liste pour trouver le dernier noeud
+        courant = self.tete
+        while courant.suivant is not None:
+            courant = courant.suivant
+
+        # Ajouter le nouveau noeud à la fin
+        courant.suivant = nouveau_noeud
+        self.taille += 1
+
+        # Si la taille dépasse 5, supprimer le premier noeud
+        if self.taille > 5:
+            self.supprimer_plus_vieux()
+
+    def supprimer_plus_vieux(self):
+        if self.tete is None:
+            return
+
+        # Supprimer le premier noeud
+        ancienne_tete = self.tete
+        self.tete = self.tete.suivant
+        ancienne_tete.suivant = None
+        self.taille -= 1
+
+    def recuperer_nieme_element(self, n):
+        if n < 0 or n >= self.taille:
+            raise IndexError("Index hors limites")
+
+        courant = self.tete
+        indice = 0
+        while indice < n:
+            courant = courant.suivant
+            indice += 1
+        print(courant.valeur)
+        return courant.valeur
+
+    def afficher(self):
+        courant = self.tete
+        while courant is not None:
+            print(courant.valeur, end=" -> ")
+            courant = courant.suivant
+        print("None")
+
