@@ -25,6 +25,14 @@ class ListeChainee:
         self.taille = 0
 
     def ajouter(self, valeur):
+        """
+        Cette méthode permet d'ajouter une valeur à la fin de la liste.
+        La valeur doit être un tableau de trois éléments.
+
+        Args:
+            valeur (list): La valeur à ajouter à la fin de la liste.
+
+        """
         if len(valeur) != 3:
             raise ValueError("La valeur doit être un tableau de trois éléments")
 
@@ -60,6 +68,10 @@ class ListeChainee:
         self.taille -= 1
 
     def recuperer_nieme_element(self, n):
+        """
+        Cette méthode permet de récupérer le n-ième élément de la liste.
+
+        """
         if n < 0 or n >= self.taille:
             raise IndexError("Index hors limites")
 
@@ -77,4 +89,3 @@ class ListeChainee:
             print(courant.valeur, end=" -> ")
             courant = courant.suivant
         print("None")
-
