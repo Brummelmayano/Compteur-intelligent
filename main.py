@@ -27,9 +27,10 @@ def main():
             cropped_image = tflite_detect_and_cut_scoreboard(image=frame)
 
             if cropped_image is None:
+                
                 now = datetime.now()
                 timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")  # Format de timestamp : année-mois-jour_heure-minute-seconde
-                nom_fichier = f"/images/captures/image_capturee_{timestamp}.jpg"
+                nom_fichier = f"../images/captures/image_capturee_{timestamp}.jpg"  # à supprimer pendant le deployement
                 cv2.imwrite(nom_fichier, frame)
                 print(f"Image enregistrée avec succès sous {nom_fichier}")
 
