@@ -71,6 +71,7 @@ def main():
             #ajouter les informations extraits seulement si les minutes sont extraits
             if len(minutes[0]) == 5 or  len(minutes[0]) == 4:
                 liste.ajouter(infos_detected)
+                liste.afficher()
             else:
                 print("infos non ajouté dans la liste" )
 
