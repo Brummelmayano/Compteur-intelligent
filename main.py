@@ -65,15 +65,18 @@ def main():
             score_ER = r"^[0-9]{1}$"
             score = filtrer_donnees_match(list_data, score_ER)
 
-            current_info = [noms_equipes, score, minutes]
-            print(current_info)
+            infos_detected = [noms_equipes, score, minutes]
+            print(infos_detected)
 
             #ajouter les informations extraits seulement si les minutes sont extraits
             if len(minutes[0]) == 5 or  len(minutes[0]) == 4:
-                liste.ajouter(current_info)
+                liste.ajouter(infos_detected)
+            else:
+                print("infos non ajouté dans la liste" )
 
             if liste.taille >= 2:
                 previous_info = liste.recuperer_nieme_element(0)
+                current_info = liste.recuperer_nieme_element(1)
 
                 if is_new_match(current_info, previous_info):
                     match_counter += 1
