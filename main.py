@@ -8,8 +8,8 @@ from liste_chainee import ListeChainee
 def main():
     # Créer une liste vide
     liste = ListeChainee()
-    match_counter = 0
-    device_path = find_device_path()  # Remplacez par le chemin correct
+    match_counter = 1
+    device_path = find_device_path()  
 
 
     while True:
