@@ -4,6 +4,9 @@ from fonctions import filtrer_donnees_match, is_new_match, find_device_path
 
 from ocr_paddle import ocr_paddle
 from liste_chainee import ListeChainee
+import cv2
+from datetime import datetime
+
 
 def main():
     # Créer une liste vide
@@ -24,7 +27,16 @@ def main():
             cropped_image = tflite_detect_and_cut_scoreboard(image=frame)
 
             if cropped_image is None:
+                now = datetime.now()
+                timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")  # Format de timestamp : année-mois-jour_heure-minute-seconde
+                nom_fichier = f"/images/captures/image_capturee_{timestamp}.jpg"
+                cv2.imwrite(nom_fichier, frame)
+                print(f"Image enregistrée avec succès sous {nom_fichier}")
+
                 raise Exception("Aucune bande de score détectée")
+                
+
+
 
             # 3. Extraction de texte à l'aide d'un modèle OCR
             list_data = ocr_paddle(cropped_image)
