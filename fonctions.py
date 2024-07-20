@@ -1,4 +1,5 @@
 import re
+import cv2
 
 def filtrer_donnees_match(list_data, expression_reguliere):
     """
@@ -74,20 +75,52 @@ def is_new_match(current_info, previous_info):
     current_teams, current_score, current_minutes = current_info
     previous_teams, previous_score, previous_minutes = previous_info
 
+
     # Calculer le score total actuel et précédent en additionnant les scores individuels
     current_total_score = sum(map(int, current_score))
     previous_total_score = sum(map(int, previous_score))
 
-    # Vérifier si les équipes ont changé ou si le score total actuel est inférieur au score total précédent
-    if is_teams_changed(current_teams, previous_teams) or current_total_score < previous_total_score:
-        return True  # Un nouveau match est détecté
 
-    # Convertir les minutes actuelles et précédentes en valeurs numériques pour comparaison
-    current_minutes_value = int(current_minutes[0].split(':')[0]) * 60 + int(current_minutes[0].split(':')[1])
-    previous_minutes_value = int(previous_minutes[0].split(':')[0]) * 60 + int(previous_minutes[0].split(':')[1])
+    #les listes current_teams et previous_teams doivent contenir 2 deux equipes chacun 
+    #et la longuer de current_score et previous_score
+    if (len(current_teams) == 2) and  (len(previous_teams) == 2) and (len(current_score) == len(previous_score)):
+      # Vérifier si les équipes ont changé ou si le score total actuel est inférieur au score total précédent
+      if is_teams_changed(current_teams, previous_teams) or current_total_score < previous_total_score:
+          return True  # Un nouveau match est détecté
 
-    # Vérifier si les minutes actuelles sont inférieures aux minutes précédentes
-    if current_minutes_value < previous_minutes_value:
-        return True  # Un nouveau match est détecté
+    # current_minutes et previous_minutes doivent etre de meme longueur
+    if len(current_minutes ) == len(previous_minutes):
+      # Convertir les minutes actuelles et précédentes en valeurs numériques pour comparaison
+      current_minutes_value = int(current_minutes[0].split(':')[0]) * 60 + int(current_minutes[0].split(':')[1])
+      previous_minutes_value = int(previous_minutes[0].split(':')[0]) * 60 + int(previous_minutes[0].split(':')[1])
+
+      # Vérifier si les minutes actuelles sont inférieures aux minutes précédentes
+      if current_minutes_value < previous_minutes_value:
+          return True  # Un nouveau match est détecté
 
     return False  # Aucun nouveau match détecté
+
+
+
+def find_device_path():
+    """
+    Cherche parmi plusieurs chemins de périphériques vidéo pour trouver celui
+    qui peut être ouvert avec succès en utilisant OpenCV.
+
+    Returns:
+        str: Le chemin du périphérique vidéo disponible. Par défaut, retourne
+             '/dev/video0' si aucun périphérique n'est trouvé.
+
+    """
+    device_paths = ['/dev/video0', '/dev/video1', '/dev/video2']
+
+    for device_path in device_paths:
+        # Tentative d'ouverture du périphérique vidéo avec OpenCV
+        cap = cv2.VideoCapture(device_path, cv2.CAP_V4L2)
+        if cap.isOpened():
+            # Libération des ressources après vérification du succès de l'ouverture
+            cap.release()
+            return device_path
+
+    # Si aucun périphérique n'est trouvé, retourne '/dev/video0' par défaut
+    return '/dev/video0'
