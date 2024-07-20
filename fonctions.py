@@ -75,11 +75,12 @@ def is_new_match(current_info, previous_info):
     current_teams, current_score, current_minutes = current_info
     previous_teams, previous_score, previous_minutes = previous_info
 
+    """
+
 
     # Calculer le score total actuel et précédent en additionnant les scores individuels
     current_total_score = sum(map(int, current_score))
     previous_total_score = sum(map(int, previous_score))
-
 
     #les listes current_teams et previous_teams doivent contenir 2 deux equipes chacun 
     #et la longuer de current_score et previous_score
@@ -87,7 +88,7 @@ def is_new_match(current_info, previous_info):
       # Vérifier si les équipes ont changé ou si le score total actuel est inférieur au score total précédent
       if is_teams_changed(current_teams, previous_teams) or current_total_score < previous_total_score:
           return True  # Un nouveau match est détecté
-
+    """
     # current_minutes et previous_minutes doivent etre de meme longueur
     if len(current_minutes ) == len(previous_minutes):
       # Convertir les minutes actuelles et précédentes en valeurs numériques pour comparaison
