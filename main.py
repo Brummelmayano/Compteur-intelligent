@@ -1,6 +1,7 @@
 from detect_roi import tflite_detect_and_cut_scoreboard
 from capture_image import capture_image
-from fonctions import filtrer_donnees_match, is_new_match
+from fonctions import filtrer_donnees_match, is_new_match, find_device_path
+
 from ocr_paddle import ocr_paddle
 from liste_chainee import ListeChainee
 
@@ -8,11 +9,12 @@ def main():
     # Créer une liste vide
     liste = ListeChainee()
     match_counter = 0
+    device_path = find_device_path()  # Remplacez par le chemin correct
+
 
     while True:
         try:
             # 1. Capture d'image
-            device_path = '/dev/video0'  # Remplacez par le chemin correct
             frame = capture_image(device_path)
 
             if frame is None:
@@ -47,7 +49,7 @@ def main():
             minutes = filtrer_donnees_match(list_data, minutes_ER)
 
             # ER pour les scores
-            score_ER = r"^[0-9]{1,2}$"
+            score_ER = r"^[0-9]{1}$"
             score = filtrer_donnees_match(list_data, score_ER)
 
             current_info = [noms_equipes, score, minutes]
