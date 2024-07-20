@@ -68,7 +68,7 @@ def main():
             print(current_info)
 
             #ajouter les informations extraits seulement si les minutes sont extraits
-            if len(minutes[0] == 5) or  len(minutes[0] == 4):
+            if len(minutes[0]) == 5 or  len(minutes[0]) == 4:
                 liste.ajouter(current_info)
 
             if liste.taille >= 2:
