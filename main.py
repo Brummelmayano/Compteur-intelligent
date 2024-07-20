@@ -66,8 +66,10 @@ def main():
 
             current_info = [noms_equipes, score, minutes]
             print(current_info)
-            
-            liste.ajouter(current_info)
+
+            #ajouter les informations extraits seulement si les minutes sont extraits
+            if len(minutes[0] == 5) or  len(minutes[0] == 4):
+                liste.ajouter(current_info)
 
             if liste.taille >= 2:
                 previous_info = liste.recuperer_nieme_element(0)
