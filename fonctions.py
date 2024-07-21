@@ -95,8 +95,7 @@ def is_new_match(current_info, previous_info):
 
       # Vérifier si les minutes actuelles à partir de 05:00 sont inférieures aux minutes précédentes et qu'il n'est pas compris entre 45:00 et 55:00
       if (current_minutes_value < previous_minutes_value and 
-          not (45*60 <= current_minutes_value <= 55*60) and 
-          current_minutes_value >= 5*60):
+          not (45*60 <= current_minutes_value <= 55*60)):
 
           return True  # Un nouveau match est détecté
 
