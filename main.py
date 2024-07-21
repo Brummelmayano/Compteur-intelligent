@@ -60,6 +60,9 @@ def main():
             # ER pour le timing au format 00:00 et/ou 0:0
             minutes_ER = r"^\d{1,2}:\d{1,2}$"
             minutes = filtrer_donnees_match(list_data, minutes_ER)
+            
+            # Convertir les minutes actuelles et précédentes en secondes pour comparaison
+            minutes_value = int(minutes[0].split(':')[0]) * 60 + int(minutes[0].split(':')[1])
 
             # ER pour les scores
             score_ER = r"^[0-9]{1}$"
@@ -74,11 +77,9 @@ def main():
             cv2.imwrite(nom_fichier3, cropped_image)
             print(f"Image enregistrée avec succès sous {nom_fichier3}")
             
-            # Convertir les minutes actuelles et précédentes en secondes pour comparaison
-            minutes_value = int(minutes[0].split(':')[0]) * 60 + int(minutes[0].split(':')[1])
 
             #ajouter les informations extraits seulement si les minutes sont extraits et si elle est compris entre 05:00 et 130:00
-            if len(minutes[0]) == 5 or  len(minutes[0]) == 4 and 5*60 <= minutes_value <= 135*60:
+            if (len(minutes[0]) == 5 or  len(minutes[0]) == 4) and (5*60 <= minutes_value <= 135*60):
                 liste.ajouter(infos_detected)
                 liste.afficher()
             else:
