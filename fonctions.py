@@ -75,9 +75,7 @@ def is_new_match(current_info, previous_info):
     current_teams, current_score, current_minutes = current_info
     previous_teams, previous_score, previous_minutes = previous_info
 
-    """
-
-
+    """""
     # Calculer le score total actuel et précédent en additionnant les scores individuels
     current_total_score = sum(map(int, current_score))
     previous_total_score = sum(map(int, previous_score))
@@ -88,15 +86,18 @@ def is_new_match(current_info, previous_info):
       # Vérifier si les équipes ont changé ou si le score total actuel est inférieur au score total précédent
       if is_teams_changed(current_teams, previous_teams) or current_total_score < previous_total_score:
           return True  # Un nouveau match est détecté
-    """
+    """""
     # current_minutes et previous_minutes doivent etre de meme longueur
     if len(current_minutes ) == len(previous_minutes):
-      # Convertir les minutes actuelles et précédentes en valeurs numériques pour comparaison
+      # Convertir les minutes actuelles et précédentes en secondes pour comparaison
       current_minutes_value = int(current_minutes[0].split(':')[0]) * 60 + int(current_minutes[0].split(':')[1])
       previous_minutes_value = int(previous_minutes[0].split(':')[0]) * 60 + int(previous_minutes[0].split(':')[1])
 
-      # Vérifier si les minutes actuelles sont inférieures aux minutes précédentes
-      if current_minutes_value < previous_minutes_value:
+      # Vérifier si les minutes actuelles à partir de 05:00 sont inférieures aux minutes précédentes et qu'il n'est pas compris entre 45:00 et 55:00
+      if (current_minutes_value < previous_minutes_value and 
+          not (45*60 <= current_minutes_value <= 55*60) and 
+          current_minutes_value >= 5*60):
+
           return True  # Un nouveau match est détecté
 
     return False  # Aucun nouveau match détecté
@@ -125,3 +126,26 @@ def find_device_path():
 
     # Si aucun périphérique n'est trouvé, retourne '/dev/video0' par défaut
     return '/dev/video0'
+
+
+
+def convertir_en_chaine(liste):
+    """
+    Convertit toutes les informations d'une liste de listes en une seule chaîne de caractères.
+
+    Chaque sous-liste de la liste principale est parcourue, chaque élément de la sous-liste
+    est joint en une chaîne de caractères, et enfin toutes les sous-listes sont jointes
+    en une seule chaîne de caractères.
+
+    Paramètres:
+    liste (list): Une liste de listes contenant des chaînes de caractères.
+
+    Retourne:
+    str: Une chaîne de caractères résultant de la concaténation de tous les éléments de la liste.
+
+    Exemple:
+    >>> liste = [['AVL', 'RMA'], ['0', '5'], ['01:24']]
+    >>> convertir_en_chaine(liste)
+    'AVL-RMA__0-5__01:24'
+    """
+    return '__'.join(['-'.join(sous_liste) for sous_liste in liste])
