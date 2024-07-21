@@ -1,6 +1,6 @@
 from detect_roi import tflite_detect_and_cut_scoreboard
 from capture_image import capture_image
-from fonctions import filtrer_donnees_match, is_new_match, find_device_path
+from fonctions import filtrer_donnees_match, is_new_match, find_device_path, convertir_en_chaine
 
 from ocr_paddle import ocr_paddle
 from liste_chainee import ListeChainee
@@ -21,6 +21,7 @@ def main():
             frame = capture_image(device_path)
 
             if frame is None:
+                device_path = find_device_path()  
                 raise Exception("Erreur lors de la capture d'image")
 
             # 2. Détection du ROI (Région d'Intérêt)
@@ -44,7 +45,6 @@ def main():
 
             # Libérer la mémoire des images après utilisation
             del frame
-            del cropped_image
 
             if not list_data:
                 raise Exception("Erreur lors de l'extraction de texte avec OCR")
@@ -66,14 +66,23 @@ def main():
             score = filtrer_donnees_match(list_data, score_ER)
 
             infos_detected = [noms_equipes, score, minutes]
-            print(infos_detected)
+            print(f"info detecté: {infos_detected}")
 
-            #ajouter les informations extraits seulement si les minutes sont extraits
-            if len(minutes[0]) == 5 or  len(minutes[0]) == 4:
+            #
+            infos_match = convertir_en_chaine(infos_detected)
+            nom_fichier3 = f"../images/scoreboard_minutes_detected/{timestamp}_{infos_match}.jpg"  
+            cv2.imwrite(nom_fichier3, cropped_image)
+            print(f"Image enregistrée avec succès sous {nom_fichier3}")
+            
+            # Convertir les minutes actuelles et précédentes en secondes pour comparaison
+            minutes_value = int(minutes[0].split(':')[0]) * 60 + int(minutes[0].split(':')[1])
+
+            #ajouter les informations extraits seulement si les minutes sont extraits et si elle est compris entre 05:00 et 130:00
+            if len(minutes[0]) == 5 or  len(minutes[0]) == 4 and 5*60 <= minutes_value <= 135*60:
                 liste.ajouter(infos_detected)
                 liste.afficher()
             else:
-                print("infos non ajouté dans la liste" )
+                print("infos non ajouté dans la liste")
 
             if liste.taille >= 2:
                 previous_info = liste.recuperer_nieme_element(0)
@@ -83,6 +92,17 @@ def main():
                     match_counter += 1
                     print(f"Nouveau match détecté ! Compteur de match : {match_counter}")
                     print(f"Équipes : {noms_equipes}, Score : {score}, Minutes : {minutes}")
+                    
+                    infos_match = convertir_en_chaine(current_info)
+                    nom_fichier2 = f"../images/nouveaux_match/{infos_match}.jpg"  
+
+                    cv2.imwrite(nom_fichier2, cropped_image)
+                    print(f"Image enregistrée avec succès sous {nom_fichier2}")
+            
+            #supprimer l'image detecté dans la memoire
+            del cropped_image
+
+
 
         except Exception as e:
             print(f"Erreur : {e}")
