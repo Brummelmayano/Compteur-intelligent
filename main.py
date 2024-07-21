@@ -71,17 +71,19 @@ def main():
             infos_detected = [noms_equipes, score, minutes]
             print(f"info detecté: {infos_detected}")
 
-            #
-            infos_match = convertir_en_chaine(infos_detected)
-            nom_fichier3 = f"../images/scoreboard_minutes_detected/{timestamp}_{infos_match}.jpg"  
-            cv2.imwrite(nom_fichier3, cropped_image)
-            print(f"Image enregistrée avec succès sous {nom_fichier3}")
             
 
             #ajouter les informations extraits seulement si les minutes sont extraits et si elle est compris entre 05:00 et 130:00
             if (len(minutes[0]) == 5 or  len(minutes[0]) == 4) and (5*60 <= minutes_value <= 135*60):
                 liste.ajouter(infos_detected)
                 liste.afficher()
+                
+                # enregistre l'image (scoreboard) 
+                infos_match = convertir_en_chaine(infos_detected)
+                nom_fichier3 = f"../images/scoreboard_minutes_detected/{timestamp}__{infos_match}.jpg"  
+                cv2.imwrite(nom_fichier3, cropped_image)
+                print(f"Image enregistrée avec succès sous {nom_fichier3}")
+
             else:
                 print("infos non ajouté dans la liste")
 
