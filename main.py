@@ -1,25 +1,37 @@
+import time
 from detect_roi import tflite_detect_and_cut_scoreboard
 from capture_image import capture_image
 from fonctions import filtrer_donnees_match, is_new_match, find_device_path, convertir_en_chaine
-
 from ocr_paddle import ocr_paddle
 from liste_chainee import ListeChainee
 import cv2
 from datetime import datetime
-from led_matrix import afficher_texte_sur_max7219
-import time
+from afficheur_texte import AfficheurTexte
 
 def main():
+    """
+    Fonction principale pour exécuter le traitement des images et mettre à jour l'affichage du texte.
+
+    Cette fonction capture des images en continu, détecte les régions d'intérêt, 
+    extrait le texte à l'aide d'OCR, filtre les données extraites, et met à jour
+    le compteur de matchs. Les résultats sont affichés sur une matrice LED et 
+    les images pertinentes sont sauvegardées.
+    """
+        
     # Créer une liste vide
     liste = ListeChainee()
     match_counter = 0
     device_path = find_device_path()  
 
+    # Créer une instance d'AfficheurTexte
+    afficheur = AfficheurTexte(cascaded=4)
+    afficheur.demarrer()
 
-    while True:
-        afficher_texte_sur_max7219(str(match_counter))
+    try:
+        while True:
+            # Mettre à jour le texte affiché
+            afficheur.mettre_a_jour_texte(f"m: {match_counter}")
 
-        try:
             # 1. Capture d'image
             frame = capture_image(device_path)
 
@@ -28,22 +40,17 @@ def main():
                 time.sleep(1)
                 raise Exception("Erreur lors de la capture d'image")
 
-
             # 2. Détection du ROI (Région d'Intérêt)
             cropped_image = tflite_detect_and_cut_scoreboard(image=frame)
 
             if cropped_image is None:
-                
                 now = datetime.now()
                 timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")  # Format de timestamp : année-mois-jour_heure-minute-seconde
-                nom_fichier = f"../images/captures/image_capturee_{timestamp}.jpg"  # à supprimer pendant le deployement
+                nom_fichier = f"../images/captures/image_capturee_{timestamp}.jpg"  # à supprimer pendant le déploiement
                 cv2.imwrite(nom_fichier, frame)
                 print(f"Image enregistrée avec succès sous {nom_fichier}")
 
                 raise Exception("Aucune bande de score détectée")
-                
-
-
 
             # 3. Extraction de texte à l'aide d'un modèle OCR
             list_data = ocr_paddle(cropped_image)
@@ -74,16 +81,14 @@ def main():
             score = filtrer_donnees_match(list_data, score_ER)
 
             infos_detected = [noms_equipes, score, minutes]
-            print(f"info detecté: {infos_detected}")
+            print(f"info détecté: {infos_detected}")
 
-            
-
-            #ajouter les informations extraits seulement si les minutes sont extraits et si elle est compris entre 05:00 et 130:00
-            if (len(minutes[0]) == 5 or  len(minutes[0]) == 4) and (5*60 <= minutes_value <= 135*60):
+            # Ajouter les informations extraites seulement si les minutes sont extraites et si elle est comprise entre 05:00 et 130:00
+            if (len(minutes[0]) == 5 or len(minutes[0]) == 4) and (5*60 <= minutes_value <= 135*60):
                 liste.ajouter(infos_detected)
                 liste.afficher()
                 
-                # enregistre l'image (scoreboard) 
+                # Enregistre l'image (scoreboard) 
                 infos_match = convertir_en_chaine(infos_detected)
                 nom_fichier3 = f"../images/scoreboard_minutes_detected/{timestamp}__{infos_match}.jpg"  
                 cv2.imwrite(nom_fichier3, cropped_image)
@@ -92,7 +97,7 @@ def main():
                     match_counter += 1
 
             else:
-                print("infos non ajouté dans la liste")
+                print("infos non ajoutées dans la liste")
 
             if liste.taille >= 2:
                 previous_info = liste.recuperer_nieme_element(0)
@@ -109,24 +114,23 @@ def main():
                     cv2.imwrite(nom_fichier2, cropped_image)
                     print(f"Image enregistrée avec succès sous {nom_fichier2}")
             
-            #supprimer l'image detecté dans la memoire
+            # Supprimer l'image détectée dans la mémoire
             del cropped_image
 
             time.sleep(0.5)
 
+    except Exception as e:
+        print(f"Erreur : {e}")
 
-        except Exception as e:
-            print(f"Erreur : {e}")
-
-        finally:
-            # Assurer la libération de la mémoire
-            if 'frame' in locals():
-                del frame
-            if 'cropped_image' in locals():
-                del cropped_image
-            if 'list_data' in locals():
-                del list_data
+    finally:
+        # Assurer la libération de la mémoire
+        if 'frame' in locals():
+            del frame
+        if 'cropped_image' in locals():
+            del cropped_image
+        if 'list_data' in locals():
+            del list_data
+        afficheur.arreter()
 
 if __name__ == "__main__":
     main()
-
