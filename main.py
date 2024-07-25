@@ -25,7 +25,9 @@ def main():
 
             if frame is None:
                 device_path = find_device_path()  
+                time.sleep(1)
                 raise Exception("Erreur lors de la capture d'image")
+
 
             # 2. Détection du ROI (Région d'Intérêt)
             cropped_image = tflite_detect_and_cut_scoreboard(image=frame)
