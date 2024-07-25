@@ -6,16 +6,19 @@ from ocr_paddle import ocr_paddle
 from liste_chainee import ListeChainee
 import cv2
 from datetime import datetime
-
+from led_matrix import afficher_texte_sur_max7219
+import time
 
 def main():
     # Créer une liste vide
     liste = ListeChainee()
-    match_counter = 1
+    match_counter = 0
     device_path = find_device_path()  
 
 
     while True:
+        afficher_texte_sur_max7219(str(match_counter))
+
         try:
             # 1. Capture d'image
             frame = capture_image(device_path)
@@ -83,6 +86,8 @@ def main():
                 nom_fichier3 = f"../images/scoreboard_minutes_detected/{timestamp}__{infos_match}.jpg"  
                 cv2.imwrite(nom_fichier3, cropped_image)
                 print(f"Image enregistrée avec succès sous {nom_fichier3}")
+                if liste.taille < 2:
+                    match_counter += 1
 
             else:
                 print("infos non ajouté dans la liste")
@@ -105,6 +110,7 @@ def main():
             #supprimer l'image detecté dans la memoire
             del cropped_image
 
+            time.sleep(0.5)
 
 
         except Exception as e:
