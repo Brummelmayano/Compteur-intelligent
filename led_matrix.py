@@ -1,3 +1,4 @@
+import threading
 import time
 from luma.led_matrix.device import max7219
 from luma.core.interface.serial import spi, noop
@@ -21,7 +22,8 @@ def afficher_texte_sur_max7219(texte, cascaded=4):
     # Calcul de la largeur du texte pour centrer correctement
     width, _ = textsize(texte, font=proportional(CP437_FONT))
 
-    try:
+    # Fonction pour afficher le texte en boucle
+    def afficher_texte():
         while True:
             with canvas(device) as draw:
                 # Calcul des coordonnées pour centrer le texte
@@ -31,11 +33,8 @@ def afficher_texte_sur_max7219(texte, cascaded=4):
                 # Affichage du texte
                 text(draw, (x, y), texte, fill="white", font=proportional(CP437_FONT))
 
-            # Pause entre chaque affichage
-            time.sleep(0.5)
+            time.sleep(1)  # Ajustez la pause selon vos besoins
 
-    except KeyboardInterrupt:
-        # Nettoyage de l'affichage lorsque la boucle est interrompue par Ctrl+C
-        device.clear()
-        device.cleanup()
-
+    # Création et démarrage du thread pour l'affichage du texte
+    thread_affichage = threading.Thread(target=afficher_texte)
+    thread_affichage.start()
