@@ -72,3 +72,13 @@ typing_extensions==4.12.2
 urllib3==2.2.2
 Werkzeug==3.0.3
 wrapt==1.16.0
+cbor2==5.6.4
+luma.core==2.4.2
+luma.led-matrix==1.5.0
+pyftdi==0.55.4
+pyserial==3.5
+pyusb==1.2.1
+RPi.GPIO==0.7.1
+smbus2==0.4.3
+spidev==3.6
+
