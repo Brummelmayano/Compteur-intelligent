@@ -63,7 +63,9 @@ Ce fichier définit les classes pour la gestion d'une liste chaînée de valeurs
 
 ### afficheur_texte.py
 
-Ce fichier contient des fonctions pour afficher les textes extraits sur un écran ou une interface utilisateur.
+Ce fichier contient la classe AfficheurTexte.
 
-- `afficher_texte(texte)`: Affiche le n ieme match sur un Matrix LED Display MAX7219 8x16
+    Cette classe gère l'affichage du texte sur un écran LED utilisant le contrôleur MAX7219. 
+    Elle utilise un thread pour mettre à jour l'affichage en continu, et fournit des méthodes
+    pour mettre à jour le texte à afficher et pour démarrer et arrêter le processus d'affichage
 
