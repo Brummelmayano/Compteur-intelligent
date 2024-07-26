@@ -1,9 +1,7 @@
-# Compteur-intelligent
-
-Compteur intelligent des matchs dans une salle de jeux vidéo
+# Compteur intelligent des matchs dans une salle de jeux vidéo
 
 Ce projet a pour objectif de compter automatiquement les matchs de foot joués dans une console. 
-Le système utilise des modeles de detection d'objet, de reconnaissance optique de caractères (OCR) et des expression régulière pour détecter, extraire puis filtrer le texte obtenu. 
+Le système utilise des modeles de detection d'objet, de reconnaissance optique de caractères (OCR) et des expression régulière pour détecter, extraire puis filtrer le texte trouvé. 
 
 ## Installation
 
