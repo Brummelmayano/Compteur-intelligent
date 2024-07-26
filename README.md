@@ -6,6 +6,27 @@ Compteur intelligent des matchs dans une salle de jeux vidéo
 
 Ce projet a pour objectif de compter automatiquement les matchs joués dans une salle de jeux vidéo. Le système utilise des techniques de vision par ordinateur et de reconnaissance optique de caractères (OCR) pour détecter et analyser les images des tableaux de scores des jeux vidéo.
 
+
+
+### Fonction principale (main.py)
+
+Ce fichier contient le script principal pour exécuter le programme de comptage de matchs.
+
+- `main()`: La fonction principale qui coordonne les différentes étapes du processus de comptage de matchs :
+  1. Capture d'image : Capture une image depuis le périphérique vidéo.
+  2. Détection de la ROI : Utilise le modèle TensorFlow Lite pour détecter la région d'intérêt dans l'image.
+  3. OCR : Utilise PaddleOCR pour extraire le texte de la région d'intérêt.
+  4. Filtrage des données : Filtre les données extraites pour identifier les informations pertinentes sur les matchs.
+  5. Affichage des résultats : Affiche les résultats sur l'écran ou l'interface utilisateur.
+
+## Installation
+
+Pour installer les dépendances nécessaires, exécutez la commande suivante :
+
+```sh
+pip install -r requirements.txt
+```
+
 ## Description des fichiers
 
 ### detect_roi.py
