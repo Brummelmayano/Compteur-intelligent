@@ -58,14 +58,10 @@ Ce fichier contient des fonctions pour effectuer la reconnaissance optique de ca
 
 Ce fichier définit les classes pour la gestion d'une liste chaînée de valeurs.
 
-- `class Noeud`: Représente un noeud d'une liste chaînée. Chaque noeud contient une valeur (un tableau de trois éléments) et un pointeur vers le noeud suivant.
-- `class ListeChainee`: Représente une liste chaînée de valeurs. Elle permet d'ajouter des noeuds et de parcourir la liste.
-
 ### afficheur_texte.py
 
 Ce fichier contient la classe AfficheurTexte.
 
-    Cette classe gère l'affichage du texte sur un écran LED utilisant le contrôleur MAX7219. 
-    Elle utilise un thread pour mettre à jour l'affichage en continu, et fournit des méthodes
-    pour mettre à jour le texte à afficher et pour démarrer et arrêter le processus d'affichage
+Cette classe gère l'affichage du texte sur un écran LED utilisant le contrôleur MAX7219. 
+Elle utilise un thread pour mettre à jour l'affichage en continu, et fournit des méthodes pour mettre à jour le texte à afficher et pour démarrer et arrêter le processus d'affichage
 
