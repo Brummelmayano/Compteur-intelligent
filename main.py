@@ -26,9 +26,9 @@ def main():
     # Créer une instance d'AfficheurTexte
     afficheur = AfficheurTexte(cascaded=4)
     afficheur.demarrer()
+    while True:
 
-    try:
-        while True:
+        try:
             # Mettre à jour le texte affiché
             afficheur.mettre_a_jour_texte(f"m: {match_counter}")
 
@@ -119,18 +119,18 @@ def main():
 
             time.sleep(0.5)
 
-    except Exception as e:
-        print(f"Erreur : {e}")
+        except Exception as e:
+            print(f"Erreur : {e}")
 
-    finally:
+        finally:
         # Assurer la libération de la mémoire
-        if 'frame' in locals():
-            del frame
-        if 'cropped_image' in locals():
-            del cropped_image
-        if 'list_data' in locals():
-            del list_data
-        afficheur.arreter()
+            if 'frame' in locals():
+                del frame
+            if 'cropped_image' in locals():
+                del cropped_image
+            if 'list_data' in locals():
+                del list_data
+        
 
 if __name__ == "__main__":
     main()
