@@ -36,8 +36,8 @@ def main():
             frame = capture_image(device_path)
 
             if frame is None:
-                device_path = find_device_path()  
                 time.sleep(1)
+                device_path = find_device_path()  
                 raise Exception("Erreur lors de la capture d'image")
 
             # 2. Détection du ROI (Région d'Intérêt)

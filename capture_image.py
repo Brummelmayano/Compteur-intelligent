@@ -34,7 +34,7 @@ def capture_image(device_path):
         
         # Libérer les ressources
         cap.release()
-        print(f"Image capturée")
+        print(f"Image {device_paths} capturée")
         
         return frame
 
