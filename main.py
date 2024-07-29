@@ -24,13 +24,13 @@ def main():
     device_path = find_device_path()  
 
     # Créer une instance d'AfficheurTexte
-    afficheur = AfficheurTexte(cascaded=4)
+    afficheur = AfficheurTexte(cascaded=2)
     afficheur.demarrer()
     while True:
 
         try:
             # Mettre à jour le texte affiché
-            afficheur.mettre_a_jour_texte(f"m: {match_counter}")
+            afficheur.mettre_a_jour_texte(f"{match_counter}")
 
             # 1. Capture d'image
             frame = capture_image(device_path)
@@ -87,14 +87,18 @@ def main():
             if (len(minutes[0]) == 5 or len(minutes[0]) == 4) and (5*60 <= minutes_value <= 135*60):
                 liste.ajouter(infos_detected)
                 liste.afficher()
+                if liste.taille < 2:
+                    match_counter += 1
+                    print(f"Nouveau match détecté ! Compteur de match : {match_counter}")
+                    print(f"Équipes : {noms_equipes}, Score : {score}, Minutes : {minutes}")
+
+
                 
                 # Enregistre l'image (scoreboard) 
                 infos_match = convertir_en_chaine(infos_detected)
                 nom_fichier3 = f"../images/scoreboard_minutes_detected/{timestamp}__{infos_match}.jpg"  
                 cv2.imwrite(nom_fichier3, cropped_image)
                 print(f"Image enregistrée avec succès sous {nom_fichier3}")
-                if liste.taille < 2:
-                    match_counter += 1
 
             else:
                 print("infos non ajoutées dans la liste")
