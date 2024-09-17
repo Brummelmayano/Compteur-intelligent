@@ -13,19 +13,19 @@ def capture_image(device_path):
     """
     try:
         # Ouvrir le périphérique vidéo
-        cap = cv2.VideoCapture(device_path)
-        # Vérifier si la vidéo est correctement ouverte
+        cap = cv2.VideoCapture(device_path, cv2.CAP_V4L2)
+        
+        # Vérifier si le périphérique vidéo est ouvert
         if not cap.isOpened():
-            print("Erreur: Impossible d'ouvrir la vidéo.")
-        else:
-            print("Vidéo ouverte avec succès.")
+            raise Exception("Assurez vous de mettre le bon index ou chemin de la capture video. \nVerifiez aussi que le repertoire'/dev' contient des autorisation possible ")
+        
+        # Attendre 2 secondes pour s'assurer que l'appareil soit prêt
+        time.sleep(2)
 
-	# Temps en millisecondes où vous voulez capturer l'image (par exemple, 5000 ms = 5 secondes)
-        temps_de_capture_ms = temps_de_capture_ms + 50000
+        # Définir la résolution pour un format d'image 4:3 (par exemple, 640x480)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)   # Largeur de l'image
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)   # Hauteur de l'image
 
-	# Définir la position de la vidéo au temps désiré
-        cap.set(cv2.CAP_PROP_POS_MSEC, temps_de_capture_ms)
-	
         # Capturer une image
         ret, frame = cap.read()
         

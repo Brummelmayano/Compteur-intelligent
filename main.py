@@ -38,8 +38,6 @@ def main():
     # Créer une instance d'AfficheurTexte
     afficheur = AfficheurTexte(cascaded=2)
     afficheur.demarrer()
-    temps_de_capture_ms = 50000
-
     while True:
 
         try:
@@ -47,31 +45,12 @@ def main():
             afficheur.mettre_a_jour_texte(f"{match_counter}")
 
             # 1. Capture d'image
-                   # Ouvrir le périphérique vidéo
-            cap = cv2.VideoCapture('../match.mp4')
-            # Vérifier si la vidéo est correctement ouverte
-            if not cap.isOpened():
-                print("Erreur: Impossible d'ouvrir la vidéo.")
-            else:
-                print("Vidéo ouverte avec succès.")
+            frame = capture_image(device_path)
 
-            # Temps en millisecondes où vous voulez capturer l'image (par exemple, 5000 ms = 5 secondes)
-            temps_de_capture_ms += 50000
-            if temps_de_capture_ms >= 1166000:
-                temps_de_capture_ms = 5000
-            # Définir la position de la vidéo au temps désiré
-            cap.set(cv2.CAP_PROP_POS_MSEC, temps_de_capture_ms)
-
-            # Capturer une image
-            ret, frame = cap.read()
-
-            if not ret:
-                raise Exception("essayer de débrancher puis rebrancher le HDMI Video Capture")
-
-            # Libérer les ressources
-            cap.release()
-            print(f"Image {device_path} capturée")
-
+            if frame is None:
+                time.sleep(1)
+                device_path = find_device_path()  
+                raise Exception("Erreur lors de la capture d'image")
 
             # 2. Détection du ROI (Région d'Intérêt)
             cropped_image = tflite_detect_and_cut_scoreboard(image=frame)
