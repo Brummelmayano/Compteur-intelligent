@@ -7,6 +7,7 @@ from liste_chainee import ListeChainee
 import cv2
 from datetime import datetime
 from afficheur_texte import AfficheurTexte
+from files_manager import get_csv_last_match_counter, write_to_csv, get_csv_last_match_data
 
 def main():
     """
@@ -18,9 +19,20 @@ def main():
     les images pertinentes sont sauvegardées.
     """
         
-    # Créer une liste vide
+    # Créer une liste chainé vide destiné à recevoir la liste [noms_equipes, score, minutes]
     liste = ListeChainee()
-    match_counter = 0
+
+    #charger depuis le fichier csv le dernier enregistrement de type [noms_equipes, score, minutes]
+    csv_last_match = get_csv_last_match_data()
+
+    # Vérifier si csv_last_match n'est pas None avant de l'ajouter à la liste
+    if csv_last_match is not None:
+        liste.ajouter(csv_last_match)
+
+    #obtenir match_counter du dernier match enregistré dans le fichier csv 
+    match_counter = get_csv_last_match_counter()
+
+    #recuperer le chemin ou l'index de l'HDMI VIDEO CAPTURE
     device_path = find_device_path()  
 
     # Créer une instance d'AfficheurTexte
@@ -91,6 +103,9 @@ def main():
                     match_counter += 1
                     print(f"Nouveau match détecté ! Compteur de match : {match_counter}")
                     print(f"Équipes : {noms_equipes}, Score : {score}, Minutes : {minutes}")
+                    
+                    # Écrire les détails du match dans le fichier CSV
+                    write_to_csv(noms_equipes, score, minutes, match_counter)
 
 
                 
@@ -112,6 +127,10 @@ def main():
                     print(f"Nouveau match détecté ! Compteur de match : {match_counter}")
                     print(f"Équipes : {noms_equipes}, Score : {score}, Minutes : {minutes}")
                     
+                    # Écrire les détails du match dans le fichier CSV
+                    write_to_csv(noms_equipes, score, minutes, match_counter)
+
+
                     infos_match = convertir_en_chaine(current_info)
                     nom_fichier2 = f"../images/nouveaux_match/{infos_match}.jpg"  
 
