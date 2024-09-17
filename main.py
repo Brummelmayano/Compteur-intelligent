@@ -97,6 +97,9 @@ def main():
 
             # Ajouter les informations extraites seulement si les minutes sont extraites et si elle est comprise entre 05:00 et 130:00
             if (len(minutes[0]) == 5 or len(minutes[0]) == 4) and (5*60 <= minutes_value <= 135*60):
+                # Écrire les informations extraites dans le fichier CSV
+                write_to_csv(noms_equipes, score, minutes, match_counter)
+
                 liste.ajouter(infos_detected)
                 liste.afficher()
                 if liste.taille < 2:
@@ -104,8 +107,6 @@ def main():
                     print(f"Nouveau match détecté ! Compteur de match : {match_counter}")
                     print(f"Équipes : {noms_equipes}, Score : {score}, Minutes : {minutes}")
                     
-                    # Écrire les détails du match dans le fichier CSV
-                    write_to_csv(noms_equipes, score, minutes, match_counter)
 
 
                 
@@ -127,9 +128,6 @@ def main():
                     print(f"Nouveau match détecté ! Compteur de match : {match_counter}")
                     print(f"Équipes : {noms_equipes}, Score : {score}, Minutes : {minutes}")
                     
-                    # Écrire les détails du match dans le fichier CSV
-                    write_to_csv(noms_equipes, score, minutes, match_counter)
-
 
                     infos_match = convertir_en_chaine(current_info)
                     nom_fichier2 = f"../images/nouveaux_match/{infos_match}.jpg"  
