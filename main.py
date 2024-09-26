@@ -54,10 +54,10 @@ def main():
 
             # 2. Détection du ROI (Région d'Intérêt)
             cropped_image = tflite_detect_and_cut_scoreboard(image=frame)
+            now = datetime.now()
+            timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")  # Format de timestamp : année-mois-jour_heure-minute-seconde
 
             if cropped_image is None:
-                now = datetime.now()
-                timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")  # Format de timestamp : année-mois-jour_heure-minute-seconde
                 nom_fichier = f"../images/captures/image_capturee_{timestamp}.jpg"  # à supprimer pendant le déploiement
                 cv2.imwrite(nom_fichier, frame)
                 print(f"Image enregistrée avec succès sous {nom_fichier}")
