@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+import ast
 
 def get_csv_last_match_counter(csv_file='matches.csv'):
     """
@@ -57,7 +58,7 @@ def get_csv_last_match_data(csv_file='matches.csv'):
 
             if last_row:
                 team_names = last_row[1]
-                team_names_list = ast.literal_eval(team_names_str)
+                team_names_list = ast.literal_eval(team_names)
 
                 score = last_row[2]
                 score_list = ast.literal_eval(score)
