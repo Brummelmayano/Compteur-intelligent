@@ -15,7 +15,7 @@ class AfficheurTexte:
     pour mettre à jour le texte à afficher et pour démarrer et arrêter le processus d'affichage.
     """
 
-    def __init__(self, cascaded=4):
+    def __init__(self, cascaded=4, mode_bouton = 1):
         """
         Initialise l'afficheur avec le nombre de matrices LED en cascade.
 
@@ -26,6 +26,7 @@ class AfficheurTexte:
         self.device = max7219(self.serial, cascaded=cascaded, block_orientation=-90)
         self.device.contrast(5)
         self.texte = ""
+        self.mode_bouton = mode_bouton
         self.lock = threading.Lock()
         self.thread_affichage = None  # Initialisation de l'attribut
         self.running = False  # Indicateur pour contrôler le thread
@@ -56,8 +57,18 @@ class AfficheurTexte:
 
         :param texte: Le nouveau texte à afficher.
         """
-        with self.lock:
+        with self.lock:  #Lorsqu'un thread acquiert le verrou, les autres threads doivent attendre que ce verrou soit libéré avant de pouvoir accéder à la ressource.
             self.texte = texte
+    
+    def mettre_a_jour_mode_bouton(self, number):
+        """
+        Met à jour le numero qui a été appuyé par le bouton.
+
+        :param number: l'entier qui a été retourné apres avoir appuyer le bouton
+        """
+        with self.lock:  #Lorsqu'un thread acquiert le verrou, les autres threads doivent attendre que ce verrou soit libéré avant de pouvoir accéder à la ressource.
+            self.mode_bouton = number
+
 
     def demarrer(self):
         """
@@ -84,3 +95,36 @@ class AfficheurTexte:
             self.thread_affichage.join()  # Attend que le thread se termine
         self.device.clear()
         self.device.cleanup()
+
+
+    def initialiser(self):
+        """
+        Initialise l'attribut texte à 0.
+        """
+        with self.lock:
+            self.texte = "0"
+    
+    def incremmenter(self):
+        """
+        Incrémente l'attribut texte de 1.
+        """
+        with self.lock:
+            try:
+                # Convertir le texte actuel en entier, incrémenter et reconvertir en chaîne de caractères
+                valeur_actuelle = int(self.texte)
+                self.texte = str(valeur_actuelle + 1)
+            except ValueError:
+                # Si le texte actuel ne peut pas être converti en entier, on initialise à 0 et on incrémente
+                self.texte = "1"
+
+    def get_counter(self):
+        """
+        Retourne l'attribut texte contenant la valeur du compteur sous forme d'entier.
+
+        :return: La valeur de texte comme un entier, ou 0 si la conversion échoue.
+        """
+        with self.lock:
+            try:
+                return int(self.texte)
+            except ValueError:
+                return 0  # Retourne 0 si le texte ne peut pas être converti en entier
