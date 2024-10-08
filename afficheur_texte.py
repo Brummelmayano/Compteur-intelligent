@@ -31,25 +31,31 @@ class AfficheurTexte:
         self.thread_affichage = None  # Initialisation de l'attribut
         self.running = False  # Indicateur pour contrôler le thread
 
+
     def afficher_texte(self):
         """
         Affiche le texte en continu sur la matrice LED.
 
-        Cette méthode est exécutée dans un thread en arrière-plan. Elle dessine le texte
-        centré horizontalement et fixe verticalement, puis attend une seconde avant de
-        redessiner le texte.
+        Si mode_bouton est égal à 1, affiche le texte.
+        Si mode_bouton est égal à 2, initialise le texte à 0.
         """
         while self.running:
             with self.lock:
-                with canvas(self.device) as draw:
-                    # Calcul de la largeur du texte pour centrer correctement
-                    width, _ = textsize(self.texte, font=proportional(CP437_FONT))
-                    x = (self.device.width - width) // 2
-                    y = 0  # Position verticale fixe (en haut)
+                if self.mode_bouton == 1:
+                    # Mode d'affichage du texte
+                    with canvas(self.device) as draw:
+                        # Calcul de la largeur du texte pour centrer correctement
+                        width, _ = textsize(self.texte, font=proportional(CP437_FONT))
+                        x = (self.device.width - width) // 2
+                        y = 0  # Position verticale fixe (en haut)
 
-                    # Affichage du texte
-                    text(draw, (x, y), self.texte, fill="white", font=proportional(CP437_FONT))
-            time.sleep(1)  # Ajustez la pause selon vos besoins
+                        # Affichage du texte
+                        text(draw, (x, y), self.texte, fill="white", font=proportional(CP437_FONT))
+                elif self.mode_bouton == 2:
+                    # Mode d'initialisation du compteur
+                    self.initialiser()
+
+            time.sleep(1)  # la pause
 
     def mettre_a_jour_texte(self, texte):
         """
