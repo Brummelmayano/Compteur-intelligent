@@ -150,7 +150,7 @@ def main():
 
                 if is_new_match(current_info, previous_info):
                     afficheur.incremmenter()
-                    print(f"Nouveau match détecté ! Compteur de match : {afficheur.get_counter(y)}")
+                    print(f"Nouveau match détecté ! Compteur de match : {afficheur.get_counter()}")
                     print(f"Équipes : {noms_equipes}, Score : {score}, Minutes : {minutes}")
                     
 
