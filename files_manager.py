@@ -66,10 +66,6 @@ def get_csv_last_match_data(csv_file='matches.csv'):
                 minutes = last_row[3]
                 minutes_list = ast.literal_eval(minutes)
                 return [team_names_list, score_list, minutes_list]
-<<<<<<< HEAD
-
-=======
->>>>>>> match_simulation
     
     except (IndexError, FileNotFoundError):
         return None  # Retourner None si le fichier est vide ou non trouvé
