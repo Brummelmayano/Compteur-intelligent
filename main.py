@@ -8,6 +8,7 @@ import cv2
 from datetime import datetime
 from afficheur_texte import AfficheurTexte
 from files_manager import get_csv_last_match_counter, write_to_csv, get_csv_last_match_data
+from bouton import demarrer_ecoute_bouton
 
 def main():
     """
@@ -32,17 +33,20 @@ def main():
     #obtenir match_counter du dernier match enregistré dans le fichier csv 
     match_counter = get_csv_last_match_counter()
 
+    # Mettre à jour le texte
+    afficheur.mettre_a_jour_texte(f"{match_counter}")
+
     #recuperer le chemin ou l'index de l'HDMI VIDEO CAPTURE
     device_path = find_device_path()  
 
     # Créer une instance d'AfficheurTexte
     afficheur = AfficheurTexte(cascaded=2)
-    afficheur.demarrer()
+    afficheur.demarrer() #damarrer l'afficheur avec l'objet crée dans un autre thread
+    demarrer_ecoute_bouton(afficheur=afficheur)#demarrer l'écoute du bonton dans un autre thread
+
     while True:
 
         try:
-            # Mettre à jour le texte affiché
-            afficheur.mettre_a_jour_texte(f"{match_counter}")
 
             # 1. Capture d'image
             frame = capture_image(device_path)
@@ -54,6 +58,8 @@ def main():
 
             # 2. Détection du ROI (Région d'Intérêt)
             cropped_image = tflite_detect_and_cut_scoreboard(image=frame)
+            
+            
             now = datetime.now()
             timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")  # Format de timestamp : année-mois-jour_heure-minute-seconde
 
@@ -98,16 +104,15 @@ def main():
             # Ajouter les informations extraites seulement si les minutes sont extraites et si elle est comprise entre 05:00 et 130:00
             if (len(minutes[0]) == 5 or len(minutes[0]) == 4) and (5*60 <= minutes_value <= 135*60):
                 # Écrire les informations extraites dans le fichier CSV
-                write_to_csv(noms_equipes, score, minutes, match_counter)
+                write_to_csv(noms_equipes, score, minutes, afficheur.get_counter())
 
                 liste.ajouter(infos_detected)
                 liste.afficher()
                 if liste.taille < 2:
-                    match_counter += 1
-                    print(f"Nouveau match détecté ! Compteur de match : {match_counter}")
+                    afficheur.incremmenter()
+                    print(f"Nouveau match détecté ! Compteur de match : {afficheur.get_counter()}")
                     print(f"Équipes : {noms_equipes}, Score : {score}, Minutes : {minutes}")
                     
-
 
                 
                 # Enregistre l'image (scoreboard) 
@@ -124,8 +129,8 @@ def main():
                 current_info = liste.recuperer_nieme_element(1)
 
                 if is_new_match(current_info, previous_info):
-                    match_counter += 1
-                    print(f"Nouveau match détecté ! Compteur de match : {match_counter}")
+                    afficheur.incremmenter()
+                    print(f"Nouveau match détecté ! Compteur de match : {afficheur.get_counter()}")
                     print(f"Équipes : {noms_equipes}, Score : {score}, Minutes : {minutes}")
                     
 
