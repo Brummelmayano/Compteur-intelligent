@@ -33,14 +33,16 @@ def main():
     #obtenir match_counter du dernier match enregistré dans le fichier csv 
     match_counter = get_csv_last_match_counter()
 
-    # Mettre à jour le texte
-    afficheur.mettre_a_jour_texte(f"{match_counter}")
 
     #recuperer le chemin ou l'index de l'HDMI VIDEO CAPTURE
     device_path = find_device_path()  
 
     # Créer une instance d'AfficheurTexte
     afficheur = AfficheurTexte(cascaded=2)
+
+    # Mettre à jour le texte
+    afficheur.mettre_a_jour_texte(f"{match_counter}")
+
     afficheur.demarrer() #damarrer l'afficheur avec l'objet crée dans un autre thread
     demarrer_ecoute_bouton(afficheur=afficheur)#demarrer l'écoute du bonton dans un autre thread
 
