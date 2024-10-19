@@ -104,7 +104,7 @@ def main():
             print(f"info détecté: {infos_detected}")
 
             # Ajouter les informations extraites seulement si les minutes sont extraites et si elle est comprise entre 05:00 et 130:00
-            if (len(minutes[0]) == 5 or len(minutes[0]) == 4) and (5*60 <= minutes_value <= 135*60):
+            if len(minutes) == 1 and (len(minutes[0]) == 5 or len(minutes[0]) == 4) and (5*60 <= minutes_value <= 135*60):
                 # Écrire les informations extraites dans le fichier CSV
                 write_to_csv(noms_equipes, score, minutes, afficheur.get_counter())
 
