@@ -1,0 +1,28 @@
+sudo nano /etc/systemd/system/compteur.service
+
+ecrire: 
+
+[Unit]
+Description=Exécute mon script au démarrage
+After=emergency.target
+
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/bash /home/brummel/Desktop/compteur/Compteur-intelligent/auto_la>
+
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+sudo systemctl daemon-reload
+
+
+sudo systemctl start compteur.service
+
+
+sudo systemctl enable compteur.service

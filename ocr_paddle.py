@@ -1,3 +1,5 @@
+#ocr_paddle.py
+
 from paddleocr import PaddleOCR, draw_ocr
 
 def ocr_paddle(image_path):
