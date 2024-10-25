@@ -1,3 +1,5 @@
+#bouton.py
+
 import RPi.GPIO as GPIO  # Bibliothèque pour contrôler les GPIO du Raspberry Pi
 import time  # Bibliothèque pour gérer le temps
 import threading  # Bibliothèque pour gérer les threads

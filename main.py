@@ -1,3 +1,5 @@
+#main.py
+
 import time
 from detect_roi import tflite_detect_and_cut_scoreboard
 from capture_image import capture_image

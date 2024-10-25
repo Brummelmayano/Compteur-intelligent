@@ -1,3 +1,5 @@
+import os
+import subprocess
 import threading
 import time
 from luma.led_matrix.device import max7219
@@ -21,6 +23,10 @@ class AfficheurTexte:
 
         :param cascaded: Le nombre de matrices LED connectées en cascade (par défaut 4).
         """
+
+        # Tuer tous les processus utilisant SPI avant de démarrer
+        self.terminer_processus_spi()
+
         # Configuration du port SPI pour le MAX7219
         self.serial = spi(port=0, device=0, gpio=noop())
         self.device = max7219(self.serial, cascaded=cascaded, block_orientation=-90)
@@ -88,6 +94,29 @@ class AfficheurTexte:
             self.thread_affichage = threading.Thread(target=self.afficher_texte)
             self.thread_affichage.daemon = True
             self.thread_affichage.start()
+
+    def terminer_processus_spi(self):
+        """
+        Termine tous les processus utilisant les périphériques SPI.
+        """
+        try:
+            # Lister tous les périphériques SPI disponibles
+            spi_devices = ["/dev/spidev0.0", "/dev/spidev0.1", "/dev/spidev1.0", "/dev/spidev1.1", "/dev/spidev1.2"]
+
+            # Pour chaque périphérique SPI, chercher les processus associés
+            for device in spi_devices:
+                result = subprocess.run(['lsof', device], capture_output=True, text=True)
+
+                # Si des processus utilisent le périphérique, les tuer
+                if result.stdout:
+                    print(f"Processus trouvés pour {device} :\n{result.stdout}")
+                    for line in result.stdout.splitlines()[1:]:  # Ignorer la première ligne (entête)
+                        pid = int(line.split()[1])  # Le PID se trouve dans la deuxième colonne
+                        print(f"Tuer le processus {pid} utilisant {device}")
+                        os.kill(pid, 9)  # Tuer le processus avec signal 9 (SIGKILL)
+        except Exception as e:
+            print(f"Erreur lors de la terminaison des processus SPI : {e}")
+
 
     def arreter(self):
         """
