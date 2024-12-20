@@ -24,7 +24,7 @@ afficheur.arreter()  # Arrêter le processus
 
 
 # Répertoire contenant les images de bruit de référence
-repertoire_images_reference = "chemin/vers/repertoire_images_reference"
+repertoire_images_reference = "repertoire_images_reference"
 
 def starter():
     # Étape 1 : Récupération du périphérique vidéo
