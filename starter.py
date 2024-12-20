@@ -3,7 +3,7 @@ from afficheur_texte import AfficheurTexte
 from fonctions import find_device_path
 from calibrage import verifier_similarite_frame
 from capture_image import capture_image
-from luma.core.legacy.font import proportional, CP437_FONT, TINY_FONT, SINCLAIR_FONT, LCD_FONT, SEG7_FONT, BCD_FONT, TINY_FONT, SINCLAIR_FONT, LCD_FONT, SEG7_FONT, BCD_FONT, CP437_FONT, TOM_THUMB_FONT
+from luma.core.legacy.font import proportional, CP437_FONT, TINY_FONT, SINCLAIR_FONT, LCD_FONT
 
 
 
