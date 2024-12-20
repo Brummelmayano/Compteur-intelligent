@@ -58,7 +58,7 @@ def main():
             if frame is None:
                 time.sleep(1)
                 device_path = find_device_path()  
-                raise Exception("Erreur lors de la capture d'image")
+                raise Exception("Erreur lors de la capture d'image")  #possibilité qu'en cas d'erreures de capture, on lance le scrypt (le fichier) pour afficher un message que la source vidéo n'est pas correctement branché et meme temps dans ce meme scrypte verifier si un peripherique  CAP_V4L2 est trouver pour quitter la boucle (fichier) pour continuer le programme main
 
             # 2. Détection du ROI (Région d'Intérêt)
             cropped_image = tflite_detect_and_cut_scoreboard(image=frame)
@@ -73,6 +73,7 @@ def main():
                 print(f"Image enregistrée avec succès sous {nom_fichier}")
 
                 raise Exception("Aucune bande de score détectée")
+            #en cas d'aucun panneau d'affichage detecté, on doit lancer la fonction qui va verifier si la vidéo contien le bruit ou pas si elle contien le bruit on affiche un message pour s'assurer que le cable est correctement branché
 
             # 3. Extraction de texte à l'aide d'un modèle OCR
             list_data = ocr_paddle(cropped_image)

@@ -7,8 +7,11 @@ import time
 from luma.led_matrix.device import max7219
 from luma.core.interface.serial import spi, noop
 from luma.core.render import canvas
-from luma.core.legacy import text, textsize
-from luma.core.legacy.font import proportional, CP437_FONT
+from luma.core.legacy import text, textsize, show_message
+from luma.core.legacy.font import proportional, CP437_FONT, TINY_FONT, SINCLAIR_FONT, LCD_FONT, SEG7_FONT, BCD_FONT, TINY_FONT, SINCLAIR_FONT, LCD_FONT, SEG7_FONT, BCD_FONT, CP437_FONT, TOM_THUMB_FONT
+from luma.core.virtual import viewport
+
+
 
 class AfficheurTexte:
     """
@@ -19,7 +22,7 @@ class AfficheurTexte:
     pour mettre à jour le texte à afficher et pour démarrer et arrêter le processus d'affichage.
     """
 
-    def __init__(self, cascaded=4, mode_bouton = 1):
+    def __init__(self, cascaded=2, mode_bouton = 1):
         """
         Initialise l'afficheur avec le nombre de matrices LED en cascade.
 
@@ -165,3 +168,17 @@ class AfficheurTexte:
                 return int(self.texte)
             except ValueError:
                 return 0  # Retourne 0 si le texte ne peut pas être converti en entier
+    
+
+    def defiler_text(self, text, scroll_delay=0.07, font=proportional(TINY_FONT)):
+        """
+        Fait défiler un texte sur la matrice LED.
+
+        :param text: Le texte à faire défiler.
+        :param scroll_delay: Le délai entre chaque mouvement du texte (plus la valeur est faible, plus le texte défile vite).
+        :param font: La police à utiliser pour le texte (par défaut, CP437_FONT).
+        """
+        while self.running:
+            # Utilisation de l'ancienne méthode `show_message` de luma.led_matrix pour afficher le texte
+            show_message(self.device, text, fill="white", font=font, scroll_delay=scroll_delay)
+            time.sleep(0.1)  # Petite pause entre deux défilements pour éviter une boucle trop rapide
