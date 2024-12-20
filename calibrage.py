@@ -15,6 +15,15 @@ def calculer_histogramme(image_path):
     hist = cv2.normalize(hist, hist).flatten()  # Normaliser l'histogramme
     return hist
 
+def calculer_histogramme_frame(frame):
+    """
+    Calcule l'histogramme normalisé d'une image frame (NumPy array) en niveaux de gris.
+    """
+    image_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    hist = cv2.calcHist([image_gray], [0], None, [256], [0, 256])
+    hist = cv2.normalize(hist, hist).flatten()
+    return hist
+
 def comparer_histogrammes(hist1, hist2):
     """
     Compare deux histogrammes avec la méthode de corrélation.
@@ -22,13 +31,27 @@ def comparer_histogrammes(hist1, hist2):
     """
     return cv2.compareHist(hist1, hist2, cv2.HISTCMP_CORREL)
 
-def verifier_similarite(image_test_path, images_reference_paths, seuil=0.8):
+def verifier_similarite_frame(repertoire_images_reference, image_frame, seuil=0.8):
     """
-    Vérifie si une image de test est similaire à une liste d'images de référence.
-    - seuil : score minimal pour être considéré comme similaire.
+    Vérifie si une image frame est similaire à des images contenues dans un répertoire de référence.
+    - repertoire_images_reference : chemin du répertoire contenant les images de référence
+    - image_frame : image à comparer sous forme de tableau NumPy
+    - seuil : score minimal pour être considéré comme similaire
+    Retourne True si une similarité est détectée, sinon False.
     """
-    # Calculer l'histogramme de l'image test
-    hist_test = calculer_histogramme(image_test_path)
+    # Vérifier si le répertoire existe
+    if not os.path.exists(repertoire_images_reference):
+        raise FileNotFoundError(f"Le répertoire spécifié est introuvable : {repertoire_images_reference}")
+
+    # Récupérer les chemins des images dans le répertoire
+    images_reference_paths = [
+        os.path.join(repertoire_images_reference, file)
+        for file in os.listdir(repertoire_images_reference)
+        if file.endswith(('.png', '.jpg', '.jpeg'))
+    ]
+
+    # Calculer l'histogramme de l'image frame
+    hist_test = calculer_histogramme_frame(image_frame)
 
     for ref_path in images_reference_paths:
         try:
@@ -36,27 +59,10 @@ def verifier_similarite(image_test_path, images_reference_paths, seuil=0.8):
             score = comparer_histogrammes(hist_test, hist_ref)
             print(f"Score de similarité avec {ref_path} : {score:.2f}")
             if score >= seuil:
-                print("L'image test est similaire à une image bruitée de référence.")
+                print("L'image frame est similaire à une image bruitée de référence.")
                 return True
         except FileNotFoundError as e:
             print(e)
-    
-    print("L'image test est considérée comme claire et différente des images bruitées.")
+
+    print("L'image frame est considérée comme claire et différente des images bruitées.")
     return False
-    
-
-
-# Exemple d'utilisation
-if __name__ == "__main__":
-    # Chemins des images de référence (les 3 images bruitées)
-    images_reference = [
-        '/content/Image collée.png',
-        '/content/Image collée (2).png',
-        '/content/Image collée (3).png'
-    ]
-
-    # Chemin de l'image à tester
-    image_test = '/content/image_capturee_2024-07-21_18-32-48.jpg'  # Remplacez par votre image à analyser
-
-    # Vérification
-    verifier_similarite(image_test, images_reference, seuil=0.8)
