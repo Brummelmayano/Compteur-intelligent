@@ -22,3 +22,4 @@ while True:
     device.clear()
 
     time.sleep(1)  # Pause
+    

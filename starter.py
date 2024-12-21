@@ -7,19 +7,9 @@ from luma.core.legacy.font import proportional, CP437_FONT, TINY_FONT, SINCLAIR_
 
 
 
-# Exemple d'utilisation
-afficheur = AfficheurTexte(cascaded=4, mode_bouton=1)
+# Arrêter l'affichage du texte
 
-# Démarrage de l'affichage du texte
-#afficheur.demarrer()
-
-# Mettre à jour le texte à afficher
-afficheur.mettre_a_jour_texte("...")
-
-# Faire défiler le texte
-afficheur.defiler_text(afficheur.texte, scroll_delay=0.07, font=proportional(TINY_FONT))
-
-afficheur.arreter()  # Arrêter le processus
+#afficheur.arreter()  # Arrêter le processus
 
 
 
@@ -27,6 +17,20 @@ afficheur.arreter()  # Arrêter le processus
 repertoire_images_reference = "repertoire_images_reference"
 
 def starter():
+
+    # Exemple d'utilisation
+    afficheur = AfficheurTexte(cascaded=4, mode_bouton=1)
+
+    # Démarrage de l'affichage du texte
+    #afficheur.demarrer()
+
+    # Mettre à jour le texte à afficher
+    afficheur.mettre_a_jour_texte("...")
+
+    # Faire défiler le texte
+    afficheur.defiler_text(afficheur.texte, scroll_delay=0.07, font=proportional(TINY_FONT))
+
+    
     # Étape 1 : Récupération du périphérique vidéo
     device_path = find_device_path()
     if device_path is None:
