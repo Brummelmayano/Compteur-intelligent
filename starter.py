@@ -18,21 +18,24 @@ repertoire_images_reference = "repertoire_images_reference"
 
 def starter():
 
-    # Exemple d'utilisation
+
     afficheur = AfficheurTexte(cascaded=4, mode_bouton=1)
 
-    afficheur.mettre_a_jour_texte("Nouveau texte à afficher")
+    # Afficher le premier texte
+    afficheur.mettre_a_jour_texte("Nouveau a afficher")
     afficheur.demarrer_defilement(scroll_delay=0.1)
 
-    # Mettre à jour le texte à afficher
-    #afficheur.mettre_a_jour_texte("...")
+    # Pause pour laisser défiler
+    time.sleep(2)
 
-    # Démarrer le défilement d'un texte
+    # Mettre à jour le texte
+    afficheur.mettre_a_jour_texte("papa et maman")
 
-    # Après un certain temps, arrêter l'afficheur
-    time.sleep(10)
+    # Pause pour observer le deuxième texte
+    time.sleep(2)
+
+    # Arrêter l'afficheur
     afficheur.arreter()
-
 
     
     # Étape 1 : Récupération du périphérique vidéo

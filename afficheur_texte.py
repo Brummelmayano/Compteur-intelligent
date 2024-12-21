@@ -167,25 +167,27 @@ class AfficheurTexte:
                 return int(self.texte)
             except ValueError:
                 return 0  # Retourne 0 si le texte ne peut pas être converti en entier
-    
-
- 
+        
 
     def defiler_text(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
         """
-        Fait défiler le texte sur la matrice LED.
+        Fait défiler dynamiquement le texte sur la matrice LED.
 
-        Le texte utilisé est celui contenu dans l'attribut `texte`.
+        Le texte utilisé est mis à jour dynamiquement depuis `self.texte`.
 
         :param scroll_delay: Le délai entre chaque mouvement du texte.
         :param font: La police à utiliser pour le texte (par défaut, TINY_FONT).
         """
         while self.running:
-            with self.lock:  # Protéger l'accès à `self.texte` pour éviter les conflits avec d'autres threads
+            with self.lock:  # Accès sécurisé à `self.texte`
                 texte_a_defiler = self.texte
+
+            # Affiche le message en défilement
             show_message(self.device, texte_a_defiler, fill="white", font=font, scroll_delay=scroll_delay)
-            time.sleep(0.1)  # Petite pause pour éviter une boucle trop rapide
-    
+            
+            # Petite pause pour éviter une boucle trop rapide
+            time.sleep(0.1)
+
 
     def demarrer_defilement(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
         """
