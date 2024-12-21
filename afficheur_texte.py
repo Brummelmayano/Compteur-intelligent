@@ -183,7 +183,7 @@ class AfficheurTexte:
             time.sleep(0.1)  # Petite pause entre deux défilements pour éviter une boucle trop rapide
 
 
-    def demarrer_defilement(self, texte, scroll_delay=0.07, font=proportional(TINY_FONT)):
+    def demarrer_defilement(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
         """
         Démarre le thread pour faire défiler le texte sur la matrice LED.
 
@@ -194,7 +194,7 @@ class AfficheurTexte:
         if not self.running:
             self.running = True
             self.thread_defilement = threading.Thread(
-                target=self.defiler_text, args=(texte, scroll_delay, font)
+                target=self.defiler_text, args=( self.afficher_texte, scroll_delay, font)
             )
             self.thread_defilement.daemon = True
             self.thread_defilement.start()
