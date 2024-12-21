@@ -25,10 +25,17 @@ def starter():
     #afficheur.demarrer()
 
     # Mettre à jour le texte à afficher
-    afficheur.mettre_a_jour_texte("...")
+    #afficheur.mettre_a_jour_texte("...")
 
-    # Faire défiler le texte
-    afficheur.defiler_text(afficheur.texte, scroll_delay=0.07, font=proportional(TINY_FONT))
+    # Démarrer le défilement d'un texte
+    afficheur.demarrer_defilement("Bonjour, bienvenue!", scroll_delay=0.1)
+
+    # Après un certain temps, arrêter l'afficheur
+    time.sleep(10)
+    afficheur.arreter()
+
+
+    #afficheur.defiler_text(afficheur.texte, scroll_delay=0.07, font=proportional(TINY_FONT))
 
     
     # Étape 1 : Récupération du périphérique vidéo
@@ -61,4 +68,5 @@ def starter():
 
 
 if __name__ == "__main__":
-    starter()
+    while True:
+        starter()

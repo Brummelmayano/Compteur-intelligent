@@ -123,19 +123,18 @@ class AfficheurTexte:
             print(f"Erreur lors de la terminaison des processus SPI : {e}")
 
 
+
     def arreter(self):
         """
-        Arrête le thread d'affichage du texte et nettoie les ressources.
-
-        Cette méthode arrête le thread en changeant la variable `self.running`, attend que le
-        thread se termine, puis efface l'affichage et nettoie les ressources du périphérique.
+        Arrête tous les threads en cours et nettoie les ressources.
         """
         self.running = False
         if self.thread_affichage:
-            self.thread_affichage.join()  # Attend que le thread se termine
+            self.thread_affichage.join()  # Attend que le thread d'affichage se termine
+        if hasattr(self, 'thread_defilement') and self.thread_defilement:
+            self.thread_defilement.join()  # Attend que le thread de défilement se termine
         self.device.clear()
         self.device.cleanup()
-
 
     def initialiser(self):
         """
@@ -182,3 +181,20 @@ class AfficheurTexte:
             # Utilisation de l'ancienne méthode `show_message` de luma.led_matrix pour afficher le texte
             show_message(self.device, text, fill="white", font=font, scroll_delay=scroll_delay)
             time.sleep(0.1)  # Petite pause entre deux défilements pour éviter une boucle trop rapide
+
+
+    def demarrer_defilement(self, texte, scroll_delay=0.07, font=proportional(TINY_FONT)):
+        """
+        Démarre le thread pour faire défiler le texte sur la matrice LED.
+
+        :param texte: Le texte à faire défiler.
+        :param scroll_delay: Le délai entre chaque mouvement du texte.
+        :param font: La police à utiliser pour le texte.
+        """
+        if not self.running:
+            self.running = True
+            self.thread_defilement = threading.Thread(
+                target=self.defiler_text, args=(texte, scroll_delay, font)
+            )
+            self.thread_defilement.daemon = True
+            self.thread_defilement.start()
