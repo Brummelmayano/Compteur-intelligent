@@ -191,7 +191,7 @@ class AfficheurTexte:
         """
         Démarre le thread pour faire défiler le texte sur la matrice LED.
 
-        Le texte utilisé est celui contenu dans l'attribut `texte`.
+        Utilise l'attribut `texte` pour le contenu à afficher.
 
         :param scroll_delay: Le délai entre chaque mouvement du texte.
         :param font: La police à utiliser pour le texte.
@@ -199,8 +199,10 @@ class AfficheurTexte:
         if not self.running:
             self.running = True
             self.thread_defilement = threading.Thread(
-                target=self.defiler_text, args=(self.texte, scroll_delay, font)
+                target=self.defiler_text, args=(scroll_delay, font)
             )
             self.thread_defilement.daemon = True
             self.thread_defilement.start()
+
+
 
