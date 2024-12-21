@@ -32,32 +32,32 @@ def starter():
 
     
     # Étape 1 : Récupération du périphérique vidéo
-    device_path = find_device_path()
-    if device_path is None:
-        afficheur.mettre_a_jour_texte("Aucune source vidéo disponible")
-        return
+    #device_path = find_device_path()
+    #if device_path is None:
+        #afficheur.mettre_a_jour_texte("Aucune source vidéo disponible")
+        #return
 
     # Étape 2 : Capture d'une image depuis le périphérique trouvé
-    image_frame = capture_image(device_path)
+    #image_frame = capture_image(device_path)
 
     # Vérification de l'image capturée
-    if image_frame is None or image_frame.size == 0:
-        afficheur.mettre_a_jour_texte("Erreur : Aucune image capturée. Vérifiez le périphérique vidéo.")
-        return
+    #if image_frame is None or image_frame.size == 0:
+        #afficheur.mettre_a_jour_texte("Erreur : Aucune image capturée. Vérifiez le périphérique vidéo.")
+        #return
 
     # Étape 3 : Vérification de la similarité avec les bruits
-    try:
-        resultat = verifier_similarite_frame(repertoire_images_reference, image_frame, seuil=0.8)
-    except Exception as e:
-        afficheur.mettre_a_jour_texte(f"Erreur : {e}")
-        return
+    #try:
+        #resultat = verifier_similarite_frame(repertoire_images_reference, image_frame, seuil=0.8)
+    #except Exception as e:
+        #afficheur.mettre_a_jour_texte(f"Erreur : {e}")
+        #return
 
-    if resultat:  # L'image capturée est similaire aux bruits
-        afficheur.mettre_a_jour_texte("Vérifier le câble HDMI")
-    else:  # L'image est claire, on lance le programme principal
-        afficheur.mettre_a_jour_texte("Lancement du programme...")
-        import main
-        main.run()
+    #if resultat:  # L'image capturée est similaire aux bruits
+        #afficheur.mettre_a_jour_texte("Vérifier le câble HDMI")
+    #else:  # L'image est claire, on lance le programme principal
+        #afficheur.mettre_a_jour_texte("Lancement du programme...")
+        #import main
+        #main.run()
 
 
 if __name__ == "__main__":
