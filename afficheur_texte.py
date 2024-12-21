@@ -169,32 +169,38 @@ class AfficheurTexte:
                 return 0  # Retourne 0 si le texte ne peut pas être converti en entier
     
 
-    def defiler_text(self, text, scroll_delay=0.07, font=proportional(TINY_FONT)):
-        """
-        Fait défiler un texte sur la matrice LED.
+ 
 
-        :param text: Le texte à faire défiler.
-        :param scroll_delay: Le délai entre chaque mouvement du texte (plus la valeur est faible, plus le texte défile vite).
-        :param font: La police à utiliser pour le texte (par défaut, CP437_FONT).
+    def defiler_text(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
+        """
+        Fait défiler le texte sur la matrice LED.
+
+        Le texte utilisé est celui contenu dans l'attribut `texte`.
+
+        :param scroll_delay: Le délai entre chaque mouvement du texte.
+        :param font: La police à utiliser pour le texte (par défaut, TINY_FONT).
         """
         while self.running:
-            # Utilisation de l'ancienne méthode `show_message` de luma.led_matrix pour afficher le texte
-            show_message(self.device, text, fill="white", font=font, scroll_delay=scroll_delay)
-            time.sleep(0.1)  # Petite pause entre deux défilements pour éviter une boucle trop rapide
-
+            with self.lock:  # Protéger l'accès à `self.texte` pour éviter les conflits avec d'autres threads
+                texte_a_defiler = self.texte
+            show_message(self.device, texte_a_defiler, fill="white", font=font, scroll_delay=scroll_delay)
+            time.sleep(0.1)  # Petite pause pour éviter une boucle trop rapide
+    
 
     def demarrer_defilement(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
         """
         Démarre le thread pour faire défiler le texte sur la matrice LED.
 
-        :param texte: Le texte à faire défiler.
+        Le texte utilisé est celui contenu dans l'attribut `texte`.
+
         :param scroll_delay: Le délai entre chaque mouvement du texte.
         :param font: La police à utiliser pour le texte.
         """
         if not self.running:
             self.running = True
             self.thread_defilement = threading.Thread(
-                target=self.defiler_text, args=( self.afficher_texte, scroll_delay, font)
+                target=self.defiler_text, args=(self.texte, scroll_delay, font)
             )
             self.thread_defilement.daemon = True
             self.thread_defilement.start()
+

@@ -21,21 +21,18 @@ def starter():
     # Exemple d'utilisation
     afficheur = AfficheurTexte(cascaded=4, mode_bouton=1)
 
-    # Démarrage de l'affichage du texte
-    #afficheur.demarrer()
+    afficheur.mettre_a_jour_texte("Nouveau texte à afficher")
+    afficheur.demarrer_defilement(scroll_delay=0.1)
 
     # Mettre à jour le texte à afficher
     #afficheur.mettre_a_jour_texte("...")
 
     # Démarrer le défilement d'un texte
-    afficheur.demarrer_defilement("Bonjour, bienvenue!", scroll_delay=0.1)
 
     # Après un certain temps, arrêter l'afficheur
     time.sleep(10)
     afficheur.arreter()
 
-
-    #afficheur.defiler_text(afficheur.texte, scroll_delay=0.07, font=proportional(TINY_FONT))
 
     
     # Étape 1 : Récupération du périphérique vidéo
