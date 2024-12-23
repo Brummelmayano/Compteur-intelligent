@@ -69,7 +69,6 @@ class AfficheurTexte:
                     self.initialiser()
 
             time.sleep(1)  # la pause
-
     def mettre_a_jour_texte(self, texte):
         """
         Met à jour le texte et redémarre immédiatement le défilement avec le nouveau texte.
@@ -78,23 +77,18 @@ class AfficheurTexte:
 
         """
         with self.lock:
-            if self.texte == texte:
-                return  # Si le texte est identique, ne rien faire
-            temp = self.texte
             self.texte = texte
+        
+        # Signale au défilement actuel de s'arrêter
+        self.stop_defilement.set()
 
-        if temp != texte:
-            
-            # Signale au défilement actuel de s'arrêter
-            self.stop_defilement.set()
+        # Attendre que le thread en cours s'arrête
+        if hasattr(self, 'thread_defilement') and self.thread_defilement.is_alive():
+            self.thread_defilement.join()
 
-            # Attendre que le thread en cours s'arrête
-            if hasattr(self, 'thread_defilement') and self.thread_defilement.is_alive():
-                self.thread_defilement.join()
-
-            # Réinitialiser l'événement et redémarrer le défilement avec le nouveau texte
-            self.stop_defilement.clear()
-            self.demarrer_defilement()
+        # Réinitialiser l'événement et redémarrer le défilement avec le nouveau texte
+        self.stop_defilement.clear()
+        self.demarrer_defilement()
 
 
     def mettre_a_jour_mode_bouton(self, number):
@@ -188,26 +182,26 @@ class AfficheurTexte:
             except ValueError:
                 return 0  # Retourne 0 si le texte ne peut pas être converti en entier
     
+    
     def defiler_text(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
         """
-        Fait défiler le texte sur la matrice LED. Affiche chaque message en entier avant d'interrompre.
-        
+        Fait défiler le texte sur la matrice LED. Interrompt si `stop_defilement` est activé.
+
+
+        Le texte utilisé est celui contenu dans l'attribut `texte`.
+
         :param scroll_delay: Le délai entre chaque mouvement du texte.
-        :param font: La police à utiliser pour le texte.
+        :param font: La police à utiliser pour le texte (par défaut, TINY_FONT).
         """
         while self.running and not self.stop_defilement.is_set():
             with self.lock:
                 texte_a_defiler = self.texte
+            for char in texte_a_defiler:
+                if self.stop_defilement.is_set():  # Vérifie si une interruption a été demandée
+                    return
+                show_message(self.device, char, fill="white", font=font, scroll_delay=scroll_delay)
+                time.sleep(scroll_delay)
 
-            # Vérifier si l'événement stop_defilement est activé avant de continuer
-            if self.stop_defilement.is_set():
-                break
-
-            # Défilement complet du texte
-            show_message(self.device, texte_a_defiler, fill="white", font=font, scroll_delay=scroll_delay)
-
-            # Petite pause entre les répétitions
-            time.sleep(0.1)
 
 
     def demarrer_defilement(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
