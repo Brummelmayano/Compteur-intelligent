@@ -41,6 +41,9 @@ class AfficheurTexte:
         self.lock = threading.Lock()
         self.thread_affichage = None  # Initialisation de l'attribut
         self.running = False  # Indicateur pour contrôler le thread
+        self.stop_defilement = threading.Event()  # Événement pour arrêter le défilement
+        self.thread_defilement = None
+
 
 
     def afficher_texte(self):
@@ -67,15 +70,26 @@ class AfficheurTexte:
                     self.initialiser()
 
             time.sleep(1)  # la pause
-
     def mettre_a_jour_texte(self, texte):
         """
-        Met à jour le texte à afficher sur la matrice LED.
-
+        Met à jour le texte et redémarre immédiatement le défilement avec le nouveau texte.
+        
         :param texte: Le nouveau texte à afficher.
         """
-        with self.lock:  #Lorsqu'un thread acquiert le verrou, les autres threads doivent attendre que ce verrou soit libéré avant de pouvoir accéder à la ressource.
+        with self.lock: #Lorsqu'un thread acquiert le verrou, les autres threads doivent attendre que ce verrou soit libéré avant de pouvoir accéder à la ressource.
             self.texte = texte
+        
+        # Interrompt le défilement en cours
+        self.stop_defilement.set()
+
+        # Attendre que le thread de défilement actuel s'arrête
+        if self.thread_defilement and self.thread_defilement.is_alive():
+            self.thread_defilement.join()
+
+        # Réinitialiser l'événement pour permettre un nouveau défilement
+        self.stop_defilement.clear()
+        self.demarrer_defilement()
+
     
     def mettre_a_jour_mode_bouton(self, number):
         """
@@ -123,18 +137,16 @@ class AfficheurTexte:
             print(f"Erreur lors de la terminaison des processus SPI : {e}")
 
 
-
     def arreter(self):
         """
         Arrête tous les threads en cours et nettoie les ressources.
         """
         self.running = False
-        if self.thread_affichage:
-            self.thread_affichage.join()  # Attend que le thread d'affichage se termine
-        if hasattr(self, 'thread_defilement') and self.thread_defilement:
-            self.thread_defilement.join()  # Attend que le thread de défilement se termine
+        self.stop_defilement.set()  # Arrêter le défilement en cours
+        if self.thread_defilement and self.thread_defilement.is_alive():
+            self.thread_defilement.join()
         self.device.clear()
-        self.device.cleanup()
+
 
     def initialiser(self):
         """
@@ -171,19 +183,18 @@ class AfficheurTexte:
 
     def defiler_text(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
         """
-        Fait défiler le texte sur la matrice LED.
+        Fait défiler le texte sur la matrice LED. S'interrompt si `stop_defilement` est activé.
 
         Le texte utilisé est celui contenu dans l'attribut `texte`.
 
         :param scroll_delay: Le délai entre chaque mouvement du texte.
         :param font: La police à utiliser pour le texte (par défaut, TINY_FONT).
         """
-        while self.running:
-            with self.lock:  # Protéger l'accès à `self.texte` pour éviter les conflits avec d'autres threads
-                texte_a_defiler = self.texte
-            show_message(self.device, texte_a_defiler, fill="white", font=font, scroll_delay=scroll_delay)
-            time.sleep(0.1)  # Petite pause pour éviter une boucle trop rapide
-    
+        while self.running and not self.stop_defilement.is_set():
+                with self.lock:
+                    texte_a_defiler = self.texte
+                show_message(self.device, texte_a_defiler, fill="white", font=font, scroll_delay=scroll_delay)
+                time.sleep(0.1)  # Petite pause pour éviter une boucle trop rapide
 
     def demarrer_defilement(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
         """
@@ -196,11 +207,12 @@ class AfficheurTexte:
         """
         if not self.running:
             self.running = True
-            self.thread_defilement = threading.Thread(
-                target=self.defiler_text, args=(scroll_delay, font)
-            )
-            self.thread_defilement.daemon = True
-            self.thread_defilement.start()
+        self.thread_defilement = threading.Thread(
+            target=self.defiler_text, args=(scroll_delay, font)
+        )
+        self.thread_defilement.daemon = True
+        self.thread_defilement.start()
+
 
 
 

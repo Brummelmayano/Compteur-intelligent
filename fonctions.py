@@ -125,8 +125,8 @@ def find_device_path():
             cap.release()
             return device_path
 
-    # Si aucun périphérique n'est trouvé, retourne '/dev/video0' par défaut
-    return '/dev/video0'
+    # Si aucun périphérique n'est trouvé, retourne None par défaut
+    return None
 
 
 
