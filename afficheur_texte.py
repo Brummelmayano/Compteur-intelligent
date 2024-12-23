@@ -41,8 +41,7 @@ class AfficheurTexte:
         self.lock = threading.Lock()
         self.thread_affichage = None  # Initialisation de l'attribut
         self.running = False  # Indicateur pour contrôler le thread
-        self.stop_defilement = threading.Event()  # Événement pour arrêter le défilement
-        self.thread_defilement = None
+        self.stop_defilement = threading.Event()  # Événement pour stopper le défilement
 
 
 
@@ -73,24 +72,26 @@ class AfficheurTexte:
     def mettre_a_jour_texte(self, texte):
         """
         Met à jour le texte et redémarre immédiatement le défilement avec le nouveau texte.
-        
+
         :param texte: Le nouveau texte à afficher.
+
         """
-        with self.lock: #Lorsqu'un thread acquiert le verrou, les autres threads doivent attendre que ce verrou soit libéré avant de pouvoir accéder à la ressource.
+        with self.lock:
             self.texte = texte
         
-        # Interrompt le défilement en cours
-        self.stop_defilement.set()
+        # Signale au défilement actuel de s'arrêter
+        if hasattr(self, 'stop_defilement'):
+            self.stop_defilement.set()
 
-        # Attendre que le thread de défilement actuel s'arrête
-        if self.thread_defilement and self.thread_defilement.is_alive():
+        # Attendre que le thread en cours s'arrête
+        if hasattr(self, 'thread_defilement') and self.thread_defilement.is_alive():
             self.thread_defilement.join()
 
-        # Réinitialiser l'événement pour permettre un nouveau défilement
+        # Réinitialiser l'événement et redémarrer le défilement avec le nouveau texte
         self.stop_defilement.clear()
         self.demarrer_defilement()
 
-    
+
     def mettre_a_jour_mode_bouton(self, number):
         """
         Met à jour le numero qui a été appuyé par le bouton.
@@ -143,8 +144,10 @@ class AfficheurTexte:
         """
         self.running = False
         self.stop_defilement.set()  # Arrêter le défilement en cours
-        if self.thread_defilement and self.thread_defilement.is_alive():
+        if hasattr(self, 'thread_defilement') and self.thread_defilement.is_alive():
             self.thread_defilement.join()
+        if self.thread_affichage and self.thread_affichage.is_alive():
+            self.thread_affichage.join()
         self.device.clear()
 
 
@@ -183,18 +186,21 @@ class AfficheurTexte:
 
     def defiler_text(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
         """
-        Fait défiler le texte sur la matrice LED. S'interrompt si `stop_defilement` est activé.
+        Fait défiler le texte sur la matrice LED. Interrompt si `stop_defilement` est activé.
+
 
         Le texte utilisé est celui contenu dans l'attribut `texte`.
 
         :param scroll_delay: Le délai entre chaque mouvement du texte.
         :param font: La police à utiliser pour le texte (par défaut, TINY_FONT).
         """
+
         while self.running and not self.stop_defilement.is_set():
-                with self.lock:
-                    texte_a_defiler = self.texte
-                show_message(self.device, texte_a_defiler, fill="white", font=font, scroll_delay=scroll_delay)
-                time.sleep(0.1)  # Petite pause pour éviter une boucle trop rapide
+            with self.lock:
+                texte_a_defiler = self.texte
+            show_message(self.device, texte_a_defiler, fill="white", font=font, scroll_delay=scroll_delay)
+            time.sleep(0.1)
+
 
     def demarrer_defilement(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
         """
@@ -205,6 +211,7 @@ class AfficheurTexte:
         :param scroll_delay: Le délai entre chaque mouvement du texte.
         :param font: La police à utiliser pour le texte.
         """
+
         if not self.running:
             self.running = True
         self.thread_defilement = threading.Thread(
@@ -212,7 +219,6 @@ class AfficheurTexte:
         )
         self.thread_defilement.daemon = True
         self.thread_defilement.start()
-
 
 
 
