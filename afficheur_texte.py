@@ -80,10 +80,10 @@ class AfficheurTexte:
         with self.lock:
             if self.texte == texte:
                 return  # Si le texte est identique, ne rien faire
-
+            temp = self.texte
             self.texte = texte
-            
-        if self.texte != texte:
+
+        if temp != texte:
             
             # Signale au défilement actuel de s'arrêter
             self.stop_defilement.set()
