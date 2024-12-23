@@ -77,6 +77,9 @@ class AfficheurTexte:
 
         """
         with self.lock:
+            if self.texte == texte:
+                return  # Si le texte est identique, ne rien faire
+
             self.texte = texte
         
         # Signale au défilement actuel de s'arrêter
