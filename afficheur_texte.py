@@ -80,8 +80,7 @@ class AfficheurTexte:
             self.texte = texte
         
         # Signale au défilement actuel de s'arrêter
-        if hasattr(self, 'stop_defilement'):
-            self.stop_defilement.set()
+        self.stop_defilement.set()
 
         # Attendre que le thread en cours s'arrête
         if hasattr(self, 'thread_defilement') and self.thread_defilement.is_alive():
@@ -182,8 +181,8 @@ class AfficheurTexte:
                 return int(self.texte)
             except ValueError:
                 return 0  # Retourne 0 si le texte ne peut pas être converti en entier
-        
-
+    
+    
     def defiler_text(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
         """
         Fait défiler le texte sur la matrice LED. Interrompt si `stop_defilement` est activé.
@@ -194,12 +193,15 @@ class AfficheurTexte:
         :param scroll_delay: Le délai entre chaque mouvement du texte.
         :param font: La police à utiliser pour le texte (par défaut, TINY_FONT).
         """
-
         while self.running and not self.stop_defilement.is_set():
             with self.lock:
                 texte_a_defiler = self.texte
-            show_message(self.device, texte_a_defiler, fill="white", font=font, scroll_delay=scroll_delay)
-            time.sleep(0.1)
+            for char in texte_a_defiler:
+                if self.stop_defilement.is_set():  # Vérifie si une interruption a été demandée
+                    return
+                show_message(self.device, char, fill="white", font=font, scroll_delay=scroll_delay)
+                time.sleep(scroll_delay)
+
 
 
     def demarrer_defilement(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
@@ -221,7 +223,6 @@ class AfficheurTexte:
         self.thread_defilement.start()
 
 
-
     def demarrer(self):
         """
         Démarre le thread d'affichage du texte.
@@ -229,9 +230,9 @@ class AfficheurTexte:
         Cette méthode crée et démarre un thread qui exécute `afficher_texte` en arrière-plan.
         Si le thread est déjà en cours d'exécution, cette méthode ne fait rien.
         """
-        if not self.running:
+        if not self.running:        
             self.running = True
-            self.thread_affichage = threading.Thread(target=self.afficher_texte)
-            self.thread_affichage.daemon = True
-            self.thread_affichage.start()
-
+            if not self.thread_affichage or not self.thread_affichage.is_alive():
+                self.thread_affichage = threading.Thread(target=self.afficher_texte)
+                self.thread_affichage.daemon = True
+                self.thread_affichage.start()
