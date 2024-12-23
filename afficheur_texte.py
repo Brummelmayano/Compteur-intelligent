@@ -69,6 +69,7 @@ class AfficheurTexte:
                     self.initialiser()
 
             time.sleep(1)  # la pause
+
     def mettre_a_jour_texte(self, texte):
         """
         Met à jour le texte et redémarre immédiatement le défilement avec le nouveau texte.
@@ -81,17 +82,19 @@ class AfficheurTexte:
                 return  # Si le texte est identique, ne rien faire
 
             self.texte = texte
-        
-        # Signale au défilement actuel de s'arrêter
-        self.stop_defilement.set()
+            
+        if self.texte != texte:
+            
+            # Signale au défilement actuel de s'arrêter
+            self.stop_defilement.set()
 
-        # Attendre que le thread en cours s'arrête
-        if hasattr(self, 'thread_defilement') and self.thread_defilement.is_alive():
-            self.thread_defilement.join()
+            # Attendre que le thread en cours s'arrête
+            if hasattr(self, 'thread_defilement') and self.thread_defilement.is_alive():
+                self.thread_defilement.join()
 
-        # Réinitialiser l'événement et redémarrer le défilement avec le nouveau texte
-        self.stop_defilement.clear()
-        self.demarrer_defilement()
+            # Réinitialiser l'événement et redémarrer le défilement avec le nouveau texte
+            self.stop_defilement.clear()
+            self.demarrer_defilement()
 
 
     def mettre_a_jour_mode_bouton(self, number):
