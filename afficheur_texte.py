@@ -182,25 +182,27 @@ class AfficheurTexte:
             except ValueError:
                 return 0  # Retourne 0 si le texte ne peut pas être converti en entier
     
-    
     def defiler_text(self, scroll_delay=0.07, font=proportional(TINY_FONT)):
         """
-        Fait défiler le texte sur la matrice LED. Interrompt si `stop_defilement` est activé.
-
-
-        Le texte utilisé est celui contenu dans l'attribut `texte`.
+        Fait défiler le texte sur la matrice LED. Affiche chaque message en entier avant d'interrompre.
 
         :param scroll_delay: Le délai entre chaque mouvement du texte.
-        :param font: La police à utiliser pour le texte (par défaut, TINY_FONT).
+        :param font: La police à utiliser pour le texte.
         """
         while self.running and not self.stop_defilement.is_set():
             with self.lock:
                 texte_a_defiler = self.texte
-            for char in texte_a_defiler:
-                if self.stop_defilement.is_set():  # Vérifie si une interruption a été demandée
-                    return
-                show_message(self.device, char, fill="white", font=font, scroll_delay=scroll_delay)
-                time.sleep(scroll_delay)
+
+            # Vérifier si l'événement stop_defilement est activé avant de continuer
+            if self.stop_defilement.is_set():
+                break
+
+            # Défilement complet du texte
+            show_message(self.device, texte_a_defiler, fill="white", font=font, scroll_delay=scroll_delay)
+
+            # Petite pause entre les répétitions
+            time.sleep(0.1)
+
 
 
 
