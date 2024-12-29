@@ -39,8 +39,8 @@ def starter(afficheur):
             afficheur.mettre_a_jour_texte("VERIFIER LA SOURCE VIDEO")
         else:
             afficheur.mettre_a_jour_texte("LANCEMENT...")
-            import main
-            main.run()
+            from main import main
+            main()
 
     except Exception as e:
         print(f"Erreur inattendue : {e}")
