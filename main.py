@@ -24,9 +24,11 @@ def main():
         
     # Créer une liste chainé vide destiné à recevoir la liste [noms_equipes, score, minutes]
     liste = ListeChainee()
+    print("liste = ListeChainee()")
 
     #charger depuis le fichier csv le dernier enregistrement de type [noms_equipes, score, minutes]
     csv_last_match = get_csv_last_match_data()
+    print("csv_last_match = get_csv_last_match_data()")
 
     # Vérifier si csv_last_match n'est pas None avant de l'ajouter à la liste
     if csv_last_match is not None:
@@ -38,16 +40,21 @@ def main():
 
     #recuperer le chemin ou l'index de l'HDMI VIDEO CAPTURE
     device_path = find_device_path()  
+    print("device_path = find_device_path()")
 
     # Créer une instance d'AfficheurTexte
     afficheur = AfficheurTexte(cascaded=2)
+    print("afficheur = AfficheurTexte(cascaded=2)")
 
     afficheur.terminer_processus_spi()
+    print("afficheur.terminer_processus_spi()")
 
     # Mettre à jour le texte
+    print("afficheur.mettre_a_jour_texte()")
     afficheur.mettre_a_jour_texte(f"{match_counter}")
 
     afficheur.demarrer() #damarrer l'afficheur avec l'objet crée dans un autre thread
+    print("afficheur.demarrer()")
     demarrer_ecoute_bouton(afficheur=afficheur)#demarrer l'écoute du bonton dans un autre thread
 
     while True:
