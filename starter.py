@@ -41,11 +41,11 @@ def starter(afficheur):
             afficheur.mettre_a_jour_texte("VERIFIER LA SOURCE VIDEO CAR ELLE EST FLOUE")
         else:
             afficheur.mettre_a_jour_texte("LANCEMENT...")
-            afficheur.terminer_processus_spi()
+            #afficheur.terminer_processus_spi()
             afficheur.arreter()
 
-            from ouverture import ouverture
-            ouverture()
+            from main import main
+            main()
 
     except Exception as e:
         print(f"Erreur inattendue : {e}")
