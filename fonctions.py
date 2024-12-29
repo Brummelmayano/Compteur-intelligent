@@ -1,6 +1,8 @@
 #fonctions.py
 import re
 import cv2
+import psutil
+
 
 def filtrer_donnees_match(list_data, expression_reguliere):
     """
@@ -150,3 +152,23 @@ def convertir_en_chaine(liste):
     'AVL-RMA__0-5__01:24'
     """
     return '__'.join(['-'.join(sous_liste) for sous_liste in liste])
+
+
+def arreter_processus_spi(device_name="/dev/spidev0.0"):
+    """
+    Identifie et arrête les processus utilisant un périphérique spécifique (comme /dev/spidev0.0).
+    """
+    for proc in psutil.process_iter(attrs=['pid', 'name', 'open_files']):
+        try:
+            files = proc.info.get('open_files') or []
+            for file in files:
+                if file.path == device_name:
+                    print(f"Tuer le processus {proc.info['pid']} utilisant {device_name}")
+                    proc.terminate()  # Envoie un signal d'arrêt au processus
+                    proc.wait(timeout=5)  # Attend que le processus se termine
+                    print("Processus arrêté")
+                    return True
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            continue
+    print(f"Aucun processus utilisant {device_name} n'a été trouvé.")
+    return False
