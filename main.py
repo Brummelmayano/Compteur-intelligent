@@ -3,7 +3,7 @@
 import time
 from detect_roi import tflite_detect_and_cut_scoreboard
 from capture_image import capture_image
-from fonctions import filtrer_donnees_match, is_new_match, find_device_path, convertir_en_chaine
+from fonctions import filtrer_donnees_match, is_new_match, find_device_path, convertir_en_chaine, arreter_processus_spi
 from ocr_paddle import ocr_paddle
 from liste_chainee import ListeChainee
 import cv2
@@ -40,21 +40,17 @@ def main():
 
     #recuperer le chemin ou l'index de l'HDMI VIDEO CAPTURE
     device_path = find_device_path()  
-    print("device_path = find_device_path()")
+
+    arreter_processus_spi()
 
     # Créer une instance d'AfficheurTexte
     afficheur = AfficheurTexte(cascaded=2)
-    print("afficheur = AfficheurTexte(cascaded=2)")
-
-    afficheur.terminer_processus_spi()
-    print("afficheur.terminer_processus_spi()")
 
     # Mettre à jour le texte
-    print("afficheur.mettre_a_jour_texte()")
     afficheur.mettre_a_jour_texte(f"{match_counter}")
 
     afficheur.demarrer() #damarrer l'afficheur avec l'objet crée dans un autre thread
-    print("afficheur.demarrer()")
+
     demarrer_ecoute_bouton(afficheur=afficheur)#demarrer l'écoute du bonton dans un autre thread
 
     while True:
