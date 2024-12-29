@@ -20,6 +20,8 @@ def starter(afficheur):
 
         # Vérification de l'image capturée
         if image_frame is None or image_frame.size == 0:
+            afficheur.mettre_a_jour_texte("VEILLEZ REBRANCHER LA SOURCE VIDEO")
+
             print("Erreur : Image non capturée")
             return
         else:
@@ -36,7 +38,7 @@ def starter(afficheur):
 
         # Étape 4 : Actions en fonction du résultat
         if resultat:
-            afficheur.mettre_a_jour_texte("VERIFIER LA SOURCE VIDEO")
+            afficheur.mettre_a_jour_texte("VERIFIER LA SOURCE VIDEO CAR ELLE EST FLOUE")
         else:
             afficheur.mettre_a_jour_texte("LANCEMENT...")
             from main import main
