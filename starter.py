@@ -41,8 +41,8 @@ def starter(afficheur):
             afficheur.mettre_a_jour_texte("VERIFIER LA SOURCE VIDEO CAR ELLE EST FLOUE")
         else:
             afficheur.mettre_a_jour_texte("LANCEMENT...")
-            afficheur.terminer_processus_spi()
-            afficheur.arreter()
+            #afficheur.terminer_processus_spi()
+            #afficheur.arreter()
 
             from ouverture import ouverture
             ouverture()
