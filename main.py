@@ -42,6 +42,8 @@ def main():
     # Créer une instance d'AfficheurTexte
     afficheur = AfficheurTexte(cascaded=2)
 
+    afficheur.terminer_processus_spi()
+
     # Mettre à jour le texte
     afficheur.mettre_a_jour_texte(f"{match_counter}")
 
