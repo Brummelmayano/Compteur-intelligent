@@ -23,7 +23,7 @@ def starter(afficheur):
             print("Erreur : Image non capturée")
             return
         else:
-            afficheur.mettre_a_jour_texte("LANCEMENT...")
+            afficheur.mettre_a_jour_texte("TRAITEMENT DE L'IMAGE...")
 
             
 
