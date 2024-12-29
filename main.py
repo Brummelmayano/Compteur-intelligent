@@ -41,7 +41,6 @@ def main():
     #recuperer le chemin ou l'index de l'HDMI VIDEO CAPTURE
     device_path = find_device_path()  
 
-    arreter_processus_spi()
 
     # Créer une instance d'AfficheurTexte
     afficheur = AfficheurTexte(cascaded=2)
@@ -169,4 +168,6 @@ def main():
         
 
 if __name__ == "__main__":
+    
+    arreter_processus_spi()
     main()
