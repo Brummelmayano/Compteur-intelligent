@@ -42,7 +42,7 @@ def starter(afficheur):
         else:
             afficheur.mettre_a_jour_texte("LANCEMENT...")
             #afficheur.terminer_processus_spi()
-            afficheur.arreter()
+            #afficheur.arreter()
 
             from main import main
             main()
