@@ -58,12 +58,12 @@ class AfficheurTexte:
                     # Mode d'affichage du texte
                     with canvas(self.device) as draw:
                         # Calcul de la largeur du texte pour centrer correctement
-                        width, _ = textsize(self.texte, font=proportional(CP437_FONT))
+                        width, _ = textsize(self.texte, font=proportional(TINY_FONT))
                         x = (self.device.width - width) // 2
                         y = 0  # Position verticale fixe (en haut)
 
                         # Affichage du texte
-                        text(draw, (x, y), self.texte, fill="white", font=proportional(CP437_FONT))
+                        text(draw, (x, y), self.texte, fill="white", font=proportional(TINY_FONT))
                 elif self.mode_bouton == 2:
                     # Mode d'initialisation du compteur
                     self.initialiser()
