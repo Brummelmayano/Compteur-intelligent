@@ -1,5 +1,3 @@
-#auto_launcher.sh
-
 #!/bin/bash
 
 # Variables d'environnement pour les chemins
@@ -11,13 +9,13 @@ SCRIPT_MAIN="${SCRIPT_DIR}/Compteur-intelligent/main.py"
 # Activer l'environnement virtuel
 source "${ENV_DIR}/bin/activate"
 
-# Fonction pour lancer un script et gérer les erreurs
+# Fonction pour lancer un script Python
 function run_script() {
     local script="$1"
     echo "Lancer $script"
-    python "$script" &> "${script}.log"
+    python "$script"
     if [ $? -ne 0 ]; then
-        echo "Erreur lors de l'exécution de $script. Voir le log."
+        echo "Erreur lors de l'exécution de $script."
     fi
 }
 
@@ -25,5 +23,6 @@ function run_script() {
 cd "${SCRIPT_DIR}"
 
 # Lancer les scripts
-run_script "${SCRIPT_OVERTURE}" &  # Lancer ouverture.py en arrière-plan
-run_script "${SCRIPT_MAIN}"         # Lancer main.py
+run_script "${SCRIPT_OVERTURE}" &  # Lancer starter.py en arrière-plan
+run_script "${SCRIPT_MAIN}"        # Lancer main.py
+
