@@ -69,26 +69,37 @@ class AfficheurTexte:
                     self.initialiser()
 
             time.sleep(1)  # la pause
+
     def mettre_a_jour_texte(self, texte):
         """
-        Met à jour le texte et redémarre immédiatement le défilement avec le nouveau texte.
+        Met à jour le texte et redémarre immédiatement l'affichage.
+
+        Si la longueur du texte est supérieure à 2, démarre le défilement.
+        Sinon, affiche le texte statiquement.
 
         :param texte: Le nouveau texte à afficher.
-
         """
         with self.lock:
             self.texte = texte
-        
+
         # Signale au défilement actuel de s'arrêter
         self.stop_defilement.set()
 
-        # Attendre que le thread en cours s'arrête
+        # Attendre que le thread de défilement en cours s'arrête
         if hasattr(self, 'thread_defilement') and self.thread_defilement.is_alive():
             self.thread_defilement.join()
 
-        # Réinitialiser l'événement et redémarrer le défilement avec le nouveau texte
+        # Réinitialiser l'événement de défilement
         self.stop_defilement.clear()
-        self.demarrer_defilement()
+
+        # Choisir l'affichage selon la longueur du texte
+        if len(texte) > 2:
+            print("Texte long détecté, démarrage du défilement...")
+            self.demarrer_defilement()
+        else:
+            print("Texte court détecté, affichage statique...")
+            self.demarrer()
+
 
 
     def mettre_a_jour_mode_bouton(self, number):
