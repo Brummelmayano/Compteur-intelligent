@@ -5,7 +5,8 @@ from calibrage import verifier_similarite_frame
 from capture_image import capture_image
 
 # Répertoire contenant les images de bruit de référence
-repertoire_images_reference = "repertoire_images_reference"
+repertoire_images_reference = "/home/brummel/Desktop/compteur/Compteur-intelligent/repertoire_images_reference"
+
 is_good = False
 
 
