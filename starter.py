@@ -6,9 +6,9 @@ from capture_image import capture_image
 
 # Répertoire contenant les images de bruit de référence
 repertoire_images_reference = "repertoire_images_reference"
+is_good = False
 
 def starter(afficheur):
-    is_good = False
     try:
         # Étape 1 : Récupération du périphérique vidéo
         device_path = find_device_path()
