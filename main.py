@@ -24,11 +24,9 @@ def main():
         
     # Créer une liste chainé vide destiné à recevoir la liste [noms_equipes, score, minutes]
     liste = ListeChainee()
-    print("liste = ListeChainee()")
 
     #charger depuis le fichier csv le dernier enregistrement de type [noms_equipes, score, minutes]
     csv_last_match = get_csv_last_match_data()
-    print("csv_last_match = get_csv_last_match_data()")
 
     # Vérifier si csv_last_match n'est pas None avant de l'ajouter à la liste
     if csv_last_match is not None:
@@ -168,6 +166,6 @@ def main():
         
 
 if __name__ == "__main__":
-    
+
     arreter_processus_spi()
     main()

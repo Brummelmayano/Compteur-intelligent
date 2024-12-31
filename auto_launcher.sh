@@ -5,7 +5,7 @@
 # Variables d'environnement pour les chemins
 SCRIPT_DIR="/home/brummel/Desktop/compteur"
 ENV_DIR="${SCRIPT_DIR}/env"
-SCRIPT_OVERTURE="${SCRIPT_DIR}/Compteur-intelligent/ouverture.py"
+SCRIPT_OVERTURE="${SCRIPT_DIR}/Compteur-intelligent/starter.py"
 SCRIPT_MAIN="${SCRIPT_DIR}/Compteur-intelligent/main.py"
 
 # Activer l'environnement virtuel
