@@ -62,9 +62,6 @@ if __name__ == "__main__":
 
     while True:
         value = starter(afficheur)
-        if value == True: #attendre 6 minutes avant de relancer le programme
-            time.sleep(360)
-            break
         time.sleep(2)  # Pause avant la prochaine exécution
 
 
