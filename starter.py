@@ -43,9 +43,10 @@ def starter(afficheur):
             afficheur.mettre_a_jour_texte("LANCEMENT...")
             #afficheur.terminer_processus_spi()
             #afficheur.arreter()
+            return True
 
-            #from main import main
-            #main()
+            from main import main
+            main()
 
     except Exception as e:
         print(f"Erreur inattendue : {e}")
@@ -55,7 +56,9 @@ if __name__ == "__main__":
     #afficheur.demarrer()  # Démarre le thread d'affichage
 
     while True:
-        starter(afficheur)
+        value = starter(afficheur)
+        if value == True:
+            break
         time.sleep(2)  # Pause avant la prochaine exécution
 
 
