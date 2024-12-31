@@ -44,8 +44,8 @@ def starter(afficheur):
             #afficheur.terminer_processus_spi()
             #afficheur.arreter()
 
-            from main import main
-            main()
+            #from main import main
+            #main()
 
     except Exception as e:
         print(f"Erreur inattendue : {e}")
