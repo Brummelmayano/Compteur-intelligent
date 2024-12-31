@@ -8,7 +8,9 @@ from capture_image import capture_image
 repertoire_images_reference = "repertoire_images_reference"
 is_good = False
 
+
 def starter(afficheur):
+    global is_good  
     try:
         # Étape 1 : Récupération du périphérique vidéo
         device_path = find_device_path()
