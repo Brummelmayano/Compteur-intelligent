@@ -8,6 +8,7 @@ from capture_image import capture_image
 repertoire_images_reference = "repertoire_images_reference"
 
 def starter(afficheur):
+    is_good = False
     try:
         # Étape 1 : Récupération du périphérique vidéo
         device_path = find_device_path()
@@ -25,7 +26,9 @@ def starter(afficheur):
             print("Erreur : Image non capturée")
             return
         else:
-            afficheur.mettre_a_jour_texte("TRAITEMENT DE L'IMAGE...")
+            if not is_good:
+                afficheur.mettre_a_jour_texte("TRAITEMENT DE L'IMAGE...")
+                is_good = True
 
             
 
@@ -45,8 +48,8 @@ def starter(afficheur):
             #afficheur.arreter()
             return True
 
-            from main import main
-            main()
+            #from main import main
+            #main()
 
     except Exception as e:
         print(f"Erreur inattendue : {e}")
@@ -57,7 +60,8 @@ if __name__ == "__main__":
 
     while True:
         value = starter(afficheur)
-        if value == True:
+        if value == True: #attendre 6 minutes avant de relancer le programme
+            time.sleep(360)
             break
         time.sleep(2)  # Pause avant la prochaine exécution
 
