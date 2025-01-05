@@ -46,12 +46,12 @@ def main():
     # Mettre à jour le texte
     afficheur.mettre_a_jour_texte(f"{match_counter}")
 
-    afficheur.demarrer() #damarrer l'afficheur avec l'objet crée dans un autre thread
 
     demarrer_ecoute_bouton(afficheur=afficheur)#demarrer l'écoute du bonton dans un autre thread
 
     while True:
 
+        afficheur.demarrer() #damarrer l'afficheur avec l'objet crée dans un autre thread
         try:
 
             # 1. Capture d'image
@@ -153,7 +153,7 @@ def main():
             time.sleep(0.5)
 
         except Exception as e:
-            print(f"Erreur : {e}")
+            afficheur.mettre_a_jour_texte(f"Erreur : {e}")
 
         finally:
         # Assurer la libération de la mémoire
