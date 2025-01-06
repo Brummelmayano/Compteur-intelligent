@@ -128,24 +128,23 @@ def main():
                 cv2.imwrite(nom_fichier3, cropped_image)
                 print(f"Image enregistrée avec succès sous {nom_fichier3}")
 
-            else:
-                print("infos non ajoutées dans la liste")
 
-            if liste.taille >= 2:
-                previous_info = liste.recuperer_nieme_element(0)
-                current_info = liste.recuperer_nieme_element(1)
+                if liste.taille >= 2:
+                    previous_info = liste.recuperer_nieme_element(0)
+                    current_info = liste.recuperer_nieme_element(1)
 
-                if is_new_match(current_info, previous_info):
-                    afficheur.incremmenter()
-                    print(f"Nouveau match détecté ! Compteur de match : {afficheur.get_counter()}")
-                    print(f"Équipes : {noms_equipes}, Score : {score}, Minutes : {minutes}")
-                    
+                    if is_new_match(current_info, previous_info):
+                        afficheur.incremmenter()
+                        print(f"Nouveau match détecté ! Compteur de match : {afficheur.get_counter()}")
+                        print(f"Équipes : {noms_equipes}, Score : {score}, Minutes : {minutes}")
+                        
 
-                    infos_match = convertir_en_chaine(current_info)
-                    nom_fichier2 = f"../images/nouveaux_match/{infos_match}.jpg"  
+                        infos_match = convertir_en_chaine(current_info)
+                        nom_fichier2 = f"../images/nouveaux_match/{infos_match}.jpg"  
 
-                    cv2.imwrite(nom_fichier2, cropped_image)
-                    print(f"Image enregistrée avec succès sous {nom_fichier2}")
+                        cv2.imwrite(nom_fichier2, cropped_image)
+                        print(f"Image enregistrée avec succès sous {nom_fichier2}")
+            
             
             # Supprimer l'image détectée dans la mémoire
             del cropped_image
