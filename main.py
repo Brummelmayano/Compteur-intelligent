@@ -153,7 +153,7 @@ def main():
             time.sleep(0.5)
 
         except Exception as e:
-            afficheur.mettre_a_jour_texte(f"Erreur : {e}")
+            print(f"Erreur : {e}")
 
         finally:
         # Assurer la libération de la mémoire
