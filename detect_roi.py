@@ -5,7 +5,7 @@ import numpy as np
 from tensorflow.lite.python.interpreter import Interpreter
 
 # Définition de la fonction pour la détection et rognage avec le modèle TFLite
-def tflite_detect_and_cut_scoreboard(image, modelpath="../model/detect.tflite", lblpath = '../model/labelmap.txt', min_conf=0.5):
+def tflite_detect_and_cut_scoreboard(image, modelpath="/home/brummel/Desktop/compteur/Compteur-intelligent/model/detect.tflite", lblpath = '/home/brummel/Desktop/compteur/Compteur-intelligent/model/labelmap.txt', min_conf=0.5):
     """
     Fonction pour détecter et rogner une zone spécifique (scoreboard) dans une image à l'aide d'un modèle TensorFlow Lite.
 

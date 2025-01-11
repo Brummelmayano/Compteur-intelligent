@@ -70,7 +70,7 @@ def main():
             timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")  # Format de timestamp : année-mois-jour_heure-minute-seconde
 
             if cropped_image is None:
-                nom_fichier = f"../images/captures/image_capturee_{timestamp}.jpg"  # à supprimer pendant le déploiement
+                nom_fichier = f"/home/brummel/Desktop/compteur/Compteur-intelligent/images/captures/image_capturee_{timestamp}.jpg"  # à supprimer pendant le déploiement
                 cv2.imwrite(nom_fichier, frame)
                 print(f"Image enregistrée avec succès sous {nom_fichier}")
 
@@ -124,7 +124,7 @@ def main():
                 
                 # Enregistre l'image (scoreboard) 
                 infos_match = convertir_en_chaine(infos_detected)
-                nom_fichier3 = f"../images/scoreboard_minutes_detected/{timestamp}__{infos_match}.jpg"  
+                nom_fichier3 = f"/home/brummel/Desktop/compteur/Compteur-intelligent/images/scoreboard_minutes_detected/{timestamp}__{infos_match}.jpg"  
                 cv2.imwrite(nom_fichier3, cropped_image)
                 print(f"Image enregistrée avec succès sous {nom_fichier3}")
 
@@ -140,7 +140,7 @@ def main():
                         
 
                         infos_match = convertir_en_chaine(current_info)
-                        nom_fichier2 = f"../images/nouveaux_match/{infos_match}.jpg"  
+                        nom_fichier2 = f"/home/brummel/Desktop/compteur/Compteur-intelligent/images/nouveaux_match/{infos_match}.jpg"  
 
                         cv2.imwrite(nom_fichier2, cropped_image)
                         print(f"Image enregistrée avec succès sous {nom_fichier2}")
