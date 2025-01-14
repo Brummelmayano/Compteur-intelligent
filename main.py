@@ -43,10 +43,6 @@ def main():
     # Créer une instance d'AfficheurTexte
     afficheur = AfficheurTexte(cascaded=2)
 
-    # Créer une instance d'AfficheurTexte pour afficher les erreurs
-    afficheur_erreur = AfficheurTexte(cascaded=2)
-
-
     # Mettre à jour le texte
     afficheur.mettre_a_jour_texte(f"{match_counter}")
 
@@ -155,10 +151,7 @@ def main():
             time.sleep(0.5)
 
         except Exception as e:
-            time.sleep(5)
-            afficheur.arreter()
             print(f"Erreur : {e}")
-            afficheur_erreur.mettre_a_jour_texte(f"{e}")
 
         finally:
         # Assurer la libération de la mémoire
