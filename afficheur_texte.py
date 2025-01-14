@@ -86,8 +86,8 @@ class AfficheurTexte:
         self.stop_defilement.set()
 
         # Attendre que le thread de défilement en cours s'arrête
-        if hasattr(self, 'thread_defilement') and self.thread_defilement.is_alive():
-            self.thread_defilement.join()
+        #if hasattr(self, 'thread_defilement') and self.thread_defilement.is_alive():
+        #    self.thread_defilement.join()
 
         # Réinitialiser l'événement de défilement
         self.stop_defilement.clear()
