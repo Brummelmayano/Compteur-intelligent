@@ -60,7 +60,7 @@ def main():
             if frame is None:
                 time.sleep(1)
                 device_path = find_device_path()  
-                raise Exception("Erreur lors de la capture d'image")  #possibilité qu'en cas d'erreures de capture, on lance le scrypt (le fichier) pour afficher un message que la source vidéo n'est pas correctement branché et meme temps dans ce meme scrypte verifier si un peripherique  CAP_V4L2 est trouver pour quitter la boucle (fichier) pour continuer le programme main
+                raise Exception("PAS DE SOURCE VIDEO")  #possibilité qu'en cas d'erreures de capture, on lance le scrypt (le fichier) pour afficher un message que la source vidéo n'est pas correctement branché et meme temps dans ce meme scrypte verifier si un peripherique  CAP_V4L2 est trouver pour quitter la boucle (fichier) pour continuer le programme main
 
             # 2. Détection du ROI (Région d'Intérêt)
             cropped_image = tflite_detect_and_cut_scoreboard(image=frame)
@@ -74,7 +74,7 @@ def main():
                 cv2.imwrite(nom_fichier, frame)
                 print(f"Image enregistrée avec succès sous {nom_fichier}")
 
-                raise Exception("Aucune bande de score détectée")
+                raise Exception("ROI NOT FOUND")
             #en cas d'aucun panneau d'affichage detecté, on doit lancer la fonction qui va verifier si la vidéo contien le bruit ou pas si elle contien le bruit on affiche un message pour s'assurer que le cable est correctement branché
 
             # 3. Extraction de texte à l'aide d'un modèle OCR
@@ -84,7 +84,7 @@ def main():
             del frame
 
             if not list_data:
-                raise Exception("Erreur lors de l'extraction de texte avec OCR")
+                raise Exception("OCR ERROR")
 
             # 4. Filtrage de texte à l'aide d'une expression régulière
             # ER pour les noms d'équipes de 2 à 20 lettres
