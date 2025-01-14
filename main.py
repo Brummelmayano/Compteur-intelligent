@@ -155,6 +155,7 @@ def main():
             time.sleep(0.5)
 
         except Exception as e:
+            afficheur.arreter()
             print(f"Erreur : {e}")
             afficheur_erreur.mettre_a_jour_texte(f"{e}")
 
