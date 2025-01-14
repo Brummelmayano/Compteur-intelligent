@@ -90,7 +90,7 @@ class AfficheurTexte:
             self.thread_defilement.join()
 
         # Réinitialiser l'événement de défilement
-        #self.stop_defilement.clear()
+        self.stop_defilement.clear()
 
         # Choisir l'affichage selon la longueur du texte
         if len(texte) > 2:
