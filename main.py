@@ -87,8 +87,8 @@ def main():
                 raise Exception("Erreur lors de l'extraction de texte avec OCR")
 
             # 4. Filtrage de texte à l'aide d'une expression régulière
-            # ER pour les noms d'équipes de 2 ou 3 lettres
-            equipes_ER = r".*^[A-Za-z]{2,3}$"
+            # ER pour les noms d'équipes de 2 à 20 lettres
+            equipes_ER = r".*^[A-Za-z]{2,20}$"
             noms_equipes = filtrer_donnees_match(list_data, equipes_ER)
 
             # Convertir chaque élément noms_equipes en majuscules
@@ -107,9 +107,8 @@ def main():
 
             infos_detected = [noms_equipes, score, minutes]
             print(f"info détecté: {infos_detected}")
-
-            # Ajouter les informations extraites seulement si les minutes sont extraites et si elle est comprise entre 05:00 et 130:00
-            if len(minutes) == 1 and (len(minutes[0]) == 5 or len(minutes[0]) == 4) and (5*60 <= minutes_value <= 135*60):
+            # Ajouter les informations extraites seulement si les minutes sont extraites et si elle est comprise entre 05:00 et 130:00 et si noms_equipes ou score est non vide
+            if len(minutes) == 1 and (len(minutes[0]) == 5 or len(minutes[0]) == 4) and (5*60 <= minutes_value <= 135*60) and (noms_equipes or score):
                 # Écrire les informations extraites dans le fichier CSV
                 write_to_csv(noms_equipes, score, minutes, afficheur.get_counter())
 
